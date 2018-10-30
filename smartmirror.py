@@ -2,6 +2,8 @@ from tkinter import *
 import cv2
 import numpy as np
 from PIL import Image, ImageTk
+import pyttsx3
+import speech_recognition as sr
 
 
 class FullscreenWindow:
@@ -90,8 +92,32 @@ def camera():
     # Closes all the frames
     cv2.destroyAllWindows ()
 
-if __name__ == "__main__":
 
+def text_to_speech():
+    engine = pyttsx3.init ()
+    engine.setProperty ('rate', 100)
+    engine.setProperty ('volume', 0.9)
+    voices = engine.getProperty ('voices')
+    print (voices)
+    engine.setProperty ('voice', voices[1].id)
+    engine.say ('Welcome in Smart Mirror')
+    engine.runAndWait ()
+
+def speak_recognizer():
+    r = sr.Recognizer ()
+    with sr.Microphone () as source:
+        print ("Speak:")
+        audio = r.listen (source)
+
+    try:
+        print ("You said " + r.recognize_google (audio))
+    except sr.UnknownValueError:
+        print ("Could not understand audio")
+    except sr.RequestError as e:
+        print ("Could not request results; {0}".format (e))
+
+if __name__ == "__main__":
+    text_to_speech()
     root = FullscreenWindow ()
     root.tk.mainloop ()
     #camera ()
