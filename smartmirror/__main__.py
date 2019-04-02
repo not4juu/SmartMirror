@@ -1,4 +1,4 @@
-import Logger
+from smartmirror import Logger
 
 """Creates a singleton instance for program Logger buffer
 

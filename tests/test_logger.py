@@ -1,5 +1,5 @@
 import unittest
-import Logger
+from smartmirror import Logger
 
 
 class TestLogger(unittest.TestCase):
