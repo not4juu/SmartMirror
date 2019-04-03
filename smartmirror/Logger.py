@@ -1,19 +1,14 @@
 import logging as syslogger
 import sys
 
-"""Creates a singleton instance for program Logger buffer
 
-Parameters
-----------
-
-Returns
--------
-
+"""
+Creates a singleton instance for program Logger buffer
 """
 
 initialized = False
 
-def init_logger(outIntoFile=True):
+def init_logger(outIntoFile=True, verbose=False):
 
     global logging
     global initialized
@@ -29,18 +24,20 @@ def init_logger(outIntoFile=True):
     )
 
     logger_consolehandler = syslogger.StreamHandler(sys.stdout)
-    logger_consolehandler.setLevel(level=syslogger.INFO)
+    logger_consolehandler.setLevel(
+        level = syslogger.DEBUG if verbose else syslogger.INFO
+    )
     logger_consolehandler.setFormatter(logger_formatter)
     logging.addHandler(logger_consolehandler)
 
     if outIntoFile:
-        logger_filehandler =  syslogger.FileHandler(filename="smartmirror_logger.log", mode="w")
+        logger_filehandler = syslogger.FileHandler(filename="smartmirror_logger.log", mode="w")
         logger_filehandler .setLevel(level=syslogger.DEBUG)
         logger_filehandler.setFormatter(logger_formatter)
         logging.addHandler(logger_filehandler)
 
     initialized = True
-    logging.debug("Logger have been created successfully")
+    logging.debug("Logger has been created successfully")
 
     return 0
 
