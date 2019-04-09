@@ -1,11 +1,9 @@
 import logging as syslogger
 import sys
 
-
 """
 Creates a singleton instance for program Logger buffer
 """
-
 initialized = False
 
 def init_logger(outIntoFile=True, verbose=False):
@@ -20,7 +18,7 @@ def init_logger(outIntoFile=True, verbose=False):
     logging = syslogger.getLogger(name="SmartMirror_Logger")
     logging.setLevel(level=syslogger.DEBUG)
     logger_formatter = syslogger.Formatter(
-        '[%(asctime)s:%(module)s:%(lineno)s:%(levelname)s] %(message)s'
+        '[%(asctime)s:%(threadName)s:%(module)s:%(lineno)s:%(levelname)s] %(message)s'
     )
 
     logger_consolehandler = syslogger.StreamHandler(sys.stdout)
