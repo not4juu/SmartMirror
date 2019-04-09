@@ -35,7 +35,8 @@ def init_logger(outIntoFile=True, verbose=False):
         logging.addHandler(logger_filehandler)
 
     initialized = True
-    logging.debug("Logger has been created successfully")
+    logging.info("Logger has been created successfully outfile: {0} verbose: {1}".format(
+        outIntoFile, verbose))
 
     return 0
 

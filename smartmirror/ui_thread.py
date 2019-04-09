@@ -1,8 +1,8 @@
 from threading import Thread
 from  glo_messages import GLO_MSG
-import  Logger
-
 from api_window import ApiWindow
+
+import  Logger
 """
     User Interface Thread
 """
@@ -11,34 +11,41 @@ class UiThread(Thread):
 
     def __init__(self,queue,lock):
         Thread.__init__(self, name="UI_Thread")
-        self.__queue = queue
-        self.__lock = lock
+        self.__message_queue = queue
+        self.__lock_queue = lock
+        self.__close_thread = False
 
-        self.__window_initialized = False
-        self.__api_window = None
+        self.__window = None
 
         Logger.logging.debug("Initialized user interface thread")
 
-    def __put_queue(self, send_message):
-        self.__lock.acquire()
-        self.__queue.put(GLO_MSG[send_message])
+    def __send_message(self, send_message):
+        self.__lock_queue.acquire()
+        self.__message_queue.put(GLO_MSG[send_message])
         Logger.logging.debug("Sends : {0}".format(send_message))
 
-    def __run_api_window(self):
-        if not self.__window_initialized:
-            self.__api_window = ApiWindow()
-            self.__window_initialized = True
-            self.__put_queue('API_WINDOW_INITIALIZED')
+    def __init_window(self):
+        self.__window = ApiWindow()
+        self.__send_message(self.__window.get_state_info())
+        return
 
-        self.__api_window.tk.update_idletasks()
-        self.__api_window.tk.update()
+    def __run_window(self):
+        if not self.__window.api_state_ok():
+            Logger.logging.debug("Close user interface thread : \"{0}\"".format(self.__window.get_state_info()))
+            self.__close_thread = True
+            self.__send_message(self.__window.get_state_info())
+        self.__window.refresh()
+        return
 
     def run(self):
         Logger.logging.debug("User_Interface thread runs")
+        self.__init_window()
 
-        for i in range(100):
-            self.__put_queue('AUTHORIZATION_COMPLETE')
-            self.__run_api_window()
+        while True:
+            if self.__close_thread:
+                break
 
-def video_collector(root):
-    Logger.logging.info("video_collector")
+            self.__run_window()
+
+
+
