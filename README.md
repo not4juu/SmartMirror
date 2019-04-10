@@ -72,7 +72,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Author
 
-* **Sebastian Kałużny** - *whole implementation* - [PurpleBooth](https://github.com/not4juu/)
+* **Sebastian Kałużny** - *whole implementation* - [not4juu](https://github.com/not4juu/)
 
 ## License
 
