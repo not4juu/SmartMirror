@@ -11,13 +11,13 @@ from uc_thread import UcThread
     - init Logger buffer into file and std output
 """
 def init_properties():
-    parser = argparse.ArgumentParser (
+    parser = argparse.ArgumentParser(
         prog = 'smartmirror',
         description = 'Smart Mirror program',
         epilog =  'more detailed information in README.md file https://github.com/not4juu/SmartMirror'
     )
-    parser.add_argument("-v", "--verbose", action='count', help='show verbose logs on console')
-    parser.add_argument ('--version', action='version', version='%(prog)s 1.0.0')
+    parser.add_argument('-v', '--verbose', action='count', help='show verbose logs on console')
+    parser.add_argument('--version', action='version', version='%(prog)s 1.0.0')
     args = parser.parse_args()
 
     Logger.init_logger(outIntoFile=True, verbose=args.verbose)

@@ -22,8 +22,10 @@ class UcThread(Thread):
 
     def __handler(self, message):
         handler = {
+            'NETWORK_CONNECTION_FAILURE': self.__h_api_window_close,
             'API_CAMERA_CONNECTION_FAILURE' : self.__h_api_window_close,
             'API_USER_QUIT': self.__h_api_window_close,
+
         }
         call_handler = handler.get(message,
                            lambda : Logger.logging.debug("Message \"{0}\" no reference handler".format(message)))

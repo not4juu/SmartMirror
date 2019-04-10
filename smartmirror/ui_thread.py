@@ -1,6 +1,8 @@
 from threading import Thread
 from  glo_messages import GLO_MSG
 from api_window import ApiWindow
+from network import Network
+
 
 import  Logger
 """
@@ -13,7 +15,9 @@ class UiThread(Thread):
         Thread.__init__(self, name="UI_Thread")
         self.__message_queue = queue
         self.__lock_queue = lock
-        self.__close_thread = False
+
+        self.__close_thread = not Network.enabled()
+        self.__send_message(Network.get_status())
 
         self.__window = None
 
