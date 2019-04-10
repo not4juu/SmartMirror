@@ -1,8 +1,7 @@
 from threading import Thread
-from  glo_messages import GLO_MSG
+from glo_messages import GLO_MSG
 from api_window import ApiWindow
 from network import Network
-
 
 import  Logger
 """
