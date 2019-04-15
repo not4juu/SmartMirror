@@ -10,6 +10,8 @@ class Network(object):
     OpenPort: 53/tcp
     Timeout in seconds : 3
     Service: domain (DNS/TCP)
+    
+    Class find out a acceessability to network by Google's public DNS servers
     """
     @classmethod
     def enabled(self):

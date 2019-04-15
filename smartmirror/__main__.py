@@ -1,5 +1,6 @@
 from threading import Lock
 from queue import Queue
+from messages_handler import MessagesHandler
 import argparse
 import Logger
 from ui_thread import UiThread
@@ -29,17 +30,17 @@ def init_properties():
     - user command thread
 """
 def init_program_threads():
-    program_queue = Queue()
-    message_lock = Lock()
+    message_queue = Queue()
+    message_locker = Lock()
+    message_handler = MessagesHandler(messages_queue = message_queue, messages_locker = message_locker)
 
-    main_ui_thread = UiThread(queue = program_queue, lock = message_lock)
+    main_ui_thread = UiThread(messages_handler = message_handler)
     main_ui_thread.start()
-    main_uc_thread = UcThread(queue = program_queue, lock = message_lock)
+    main_uc_thread = UcThread(messages_handler = message_handler)
     main_uc_thread.start()
 
-    program_queue.join()
+    message_queue.join()
     Logger.logging.debug('Threads starts successfully')
-
 """
     Main function calls by program
 """
