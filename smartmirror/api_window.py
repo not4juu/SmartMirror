@@ -1,3 +1,4 @@
+from glo_messages import GLO_MSG
 from tkinter import *
 from PIL import Image, ImageTk
 
@@ -19,13 +20,13 @@ class ApiWindow:
                 raise NameError
         except cv2.error as exception:
             Logger.logging.critical("OpenCV camera hardware problem: {0}".format(exception))
-            self.__api_state_info =  'API_CAMERA_CONNECTION_FAILURE'
+            self.__api_state_info =  GLO_MSG['API_CAMERA_CONNECTION_FAILURE']
             return False
         except Exception as exception:
             Logger.logging.critical("Camera hardware is not connected: {0}".format(exception))
-            self.__api_state_info = 'API_CAMERA_CONNECTION_FAILURE'
+            self.__api_state_info = GLO_MSG['API_CAMERA_CONNECTION_FAILURE']
             return False
-        self.__api_state_info = 'API_WINDOW_INITIALIZED'
+        self.__api_state_info = GLO_MSG['API_WINDOW_INITIALIZED']
         return True
 
     def __init__(self):
@@ -38,10 +39,21 @@ class ApiWindow:
         self.__api_state_info = 'NO_ERROR'
         self.__api_state = self.__camera_connection()
 
+        import calendar
+        a = calendar.month (2009, 12, 1,0)
+
+        #print (a)
+        #print(calendar.calendar(2009, w=2, l=1, c=6, m=3))
+
         api_name = Label(
-            self.__tk, text="Smart Mirror", bg="black",fg="white", font=35
+            self.__tk, text=a, bg="black",fg="white",
+            #font=("Times", 35, "bold italic")
+            font=("Times New Roman", 10, "bold "),justify=RIGHT
+           # font=("Helvetica", 35, "bold ")
+            #font = ("Arial", 35, "bold ")
+        #Arial (corresponds to Helvetica), Courier New (Courier), Comic Sans MS, Fixedsys, MS Sans Serif, MS Serif, Symbol, System, Times New Roman (Times), and Verdana:
         )
-        api_name.pack(side=TOP, fill=BOTH)
+        api_name.pack( side=TOP, fill=BOTH )
         self.__camera_frame = Frame(self.__tk, background='black', borderwidth=0,
                                  width=self.__camera.get (cv2.CAP_PROP_FRAME_WIDTH),
                                  heigh=self.__camera.get (cv2.CAP_PROP_FRAME_HEIGHT))
@@ -75,7 +87,7 @@ class ApiWindow:
 
     def __quit(self, event=None):
         self.__api_state = False
-        self.__api_state_info = 'API_USER_QUIT'
+        self.__api_state_info = GLO_MSG['API_USER_QUIT']
         return
 
     def __camera_capture(self,event=None):

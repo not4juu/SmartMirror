@@ -1,4 +1,3 @@
-from glo_messages import GLO_MSG
 from glo_messages import GET_MESSAGE
 import Logger
 import time
@@ -18,10 +17,10 @@ class MessagesHandler(object):
     """
         Sends (put) the message into queue and lock the queue until somone will pick up it
     """
-    def send_message(self, send_message):
+    def send_message(self, message_id):
         self.__messages_locker.acquire()
-        self.__messages_queue.put(GLO_MSG[send_message])
-        Logger.logging.debug("Sends : {0}".format(send_message))
+        self.__messages_queue.put(message_id)
+        Logger.logging.debug("Sends : {0}".format(GET_MESSAGE(message_id)))
         return None
     """
         Gets message from queue if queue is not empty, release locker for another message which will be adds
@@ -30,11 +29,11 @@ class MessagesHandler(object):
     """
     def get_message(self):
         if not self.__messages_queue.empty():
-            received_message = self.__messages_queue.get()
-            Logger.logging.debug("Received : {0}".format(GET_MESSAGE(received_message)))
+            message_id = self.__messages_queue.get()
+            Logger.logging.debug("Received : {0}".format(GET_MESSAGE(message_id)))
             self.__messages_queue.task_done()
             self.__messages_locker.release()
-            return GET_MESSAGE(received_message)
+            return message_id
         return None
     """
         Due to a user interface thread and user command thread can sends and receives at the same time. 
@@ -43,10 +42,10 @@ class MessagesHandler(object):
         
         It is some protection case - does not let program infinite loop
     """
-    def send_message_again(self,message):
+    def send_message_again(self,message_id):
         Logger.logging.debug (
-            "Message \"{0}\" no reference handler".format(message))
-        self.send_message(message)
+            "Message \"{0}\" no reference handler".format(GET_MESSAGE(message_id)))
+        self.send_message(message_id)
         time.sleep(0.05)
         return None
 

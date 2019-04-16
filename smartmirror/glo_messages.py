@@ -15,3 +15,6 @@ def GET_MESSAGE(message):
         if message == _message_id:
             return _message_str
     return None
+
+if __name__ == "__main__":
+    pass

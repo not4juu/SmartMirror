@@ -1,3 +1,5 @@
+from glo_messages import GLO_MSG
+from glo_messages import GET_MESSAGE
 from threading import Thread
 from api_window import ApiWindow
 from network import Network
@@ -20,14 +22,14 @@ class UiThread(Thread):
 
     def __run_messages_handler(self):
         handler = {
-            'MICROPHONE_FAILURE': self.__h_microphone_failure,
-            'MICROPHONE_INITIALIZED': self.__h_microphone_initialized,
+            GLO_MSG['MICROPHONE_FAILURE']: self.__h_microphone_failure,
+            GLO_MSG['MICROPHONE_INITIALIZED']: self.__h_microphone_initialized,
         }
-        message = self.__MessagesHandler.get_message()
-        if message is None:
-            return message
-        call_handler = handler.get(message,
-                                    lambda: self.__MessagesHandler.send_message_again(message))
+        message_id = self.__MessagesHandler.get_message()
+        if message_id is None:
+            return message_id
+        call_handler = handler.get(message_id,
+                                    lambda: self.__MessagesHandler.send_message_again(message_id))
         call_handler()
 
     def __h_microphone_failure(self):
@@ -41,7 +43,7 @@ class UiThread(Thread):
     def __init_window(self):
         self.__window = ApiWindow()
         Logger.logging.debug ("Command recogniton class state: {0}".format(
-            self.__window.get_state_info()
+            GET_MESSAGE (self.__window.get_state_info())
         ))
         self.__MessagesHandler.send_message(self.__window.get_state_info())
         return
@@ -50,7 +52,7 @@ class UiThread(Thread):
         if not self.__window.api_state_ok():
             self.__close_thread = True
             Logger.logging.debug("Close user interface thread : \"{0}\"".format(
-                self.__window.get_state_info())
+                GET_MESSAGE(self.__window.get_state_info()))
             )
             self.__MessagesHandler.send_message(self.__window.get_state_info())
         self.__window.refresh()
@@ -67,3 +69,5 @@ class UiThread(Thread):
         Logger.logging.debug ("User_Interface thread ends")
 
 
+if __name__ == "__main__":
+    pass

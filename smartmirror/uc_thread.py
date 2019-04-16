@@ -1,3 +1,5 @@
+from glo_messages import GLO_MSG
+from glo_messages import GET_MESSAGE
 from threading import Thread
 from command_recognition import  CommandRecognition
 import  Logger
@@ -23,24 +25,24 @@ class UcThread(Thread):
             self.__close_thread = True
 
         Logger.logging.debug ("Command recogniton class state: {0}".format (
-            self.__command_recognition.get_state_info ()
+            GET_MESSAGE(self.__command_recognition.get_state_info ())
         ))
         self.__MessagesHandler.send_message(self.__command_recognition.get_state_info())
 
 
     def __run_messages_handler(self):
         handler = {
-            'NETWORK_CONNECTION_FAILURE': self.__h_api_window_close,
-            'API_CAMERA_CONNECTION_FAILURE': self.__h_api_window_close,
-            'API_USER_QUIT': self.__h_api_window_close,
-            'NETWORK_CONNECTION_SUCCESS': self.__h_network_success,
-            'API_WINDOW_INITIALIZED': self.__h_window_success,
+            GLO_MSG['NETWORK_CONNECTION_FAILURE']: self.__h_api_window_close,
+            GLO_MSG['API_CAMERA_CONNECTION_FAILURE']: self.__h_api_window_close,
+            GLO_MSG['API_USER_QUIT']: self.__h_api_window_close,
+            GLO_MSG['NETWORK_CONNECTION_SUCCESS']: self.__h_network_success,
+            GLO_MSG['API_WINDOW_INITIALIZED']: self.__h_window_success,
         }
-        message = self.__MessagesHandler.get_message()
-        if message is None:
-            return message
-        call_handler = handler.get(message,
-                                    lambda: self.__MessagesHandler.send_message_again(message))
+        message_id = self.__MessagesHandler.get_message()
+        if message_id is None:
+            return message_id
+        call_handler = handler.get(message_id,
+                                    lambda: self.__MessagesHandler.send_message_again(message_id))
         call_handler()
 
     def __h_network_success(self):
@@ -73,3 +75,6 @@ class UcThread(Thread):
         while not self.__close_thread:
             self.__run_messages_handler()
         Logger.logging.debug ("User_Command thread ends")
+
+if __name__ == "__main__":
+    pass
