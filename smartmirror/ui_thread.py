@@ -1,9 +1,9 @@
-from glo_messages import GLO_MSG
-from glo_messages import GET_MESSAGE
+from smartmirror.glo_messages import GLO_MSG
+from smartmirror.glo_messages import GET_MESSAGE
+from smartmirror.api_window import ApiWindow
+from smartmirror.network import Network
 from threading import Thread
-from api_window import ApiWindow
-from network import Network
-import  Logger
+import Logger
 """
     User Interface Thread
 """
@@ -43,18 +43,18 @@ class UiThread(Thread):
     def __init_window(self):
         self.__window = ApiWindow()
         Logger.logging.debug ("Command recogniton class state: {0}".format(
-            GET_MESSAGE (self.__window.get_state_info())
+            GET_MESSAGE(self.__window.api_info)
         ))
-        self.__MessagesHandler.send_message(self.__window.get_state_info())
+        self.__MessagesHandler.send_message(self.__window.api_info)
         return
 
     def __run_window(self):
-        if not self.__window.api_state_ok():
+        if not self.__window.api_runs:
             self.__close_thread = True
             Logger.logging.debug("Close user interface thread : \"{0}\"".format(
-                GET_MESSAGE(self.__window.get_state_info()))
+                GET_MESSAGE(self.__window.api_info))
             )
-            self.__MessagesHandler.send_message(self.__window.get_state_info())
+            self.__MessagesHandler.send_message(self.__window.api_info)
         self.__window.refresh()
         return
 

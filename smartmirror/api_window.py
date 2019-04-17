@@ -1,16 +1,14 @@
-from glo_messages import GLO_MSG
+from smartmirror.glo_messages import GLO_MSG
+from smartmirror.api_state import ApiState
 from tkinter import *
 from PIL import Image, ImageTk
-
-import cv2
-import sys
 import Logger
-
+import cv2
 """
     Aplication Window
 """
 
-class ApiWindow:
+class ApiWindow(ApiState):
 
     def __camera_connection(self):
         Logger.logging.debug("Find camera connection")
@@ -20,24 +18,24 @@ class ApiWindow:
                 raise NameError
         except cv2.error as exception:
             Logger.logging.critical("OpenCV camera hardware problem: {0}".format(exception))
-            self.__api_state_info =  GLO_MSG['API_CAMERA_CONNECTION_FAILURE']
+            self.api_info =  GLO_MSG['API_CAMERA_CONNECTION_FAILURE']
             return False
         except Exception as exception:
             Logger.logging.critical("Camera hardware is not connected: {0}".format(exception))
-            self.__api_state_info = GLO_MSG['API_CAMERA_CONNECTION_FAILURE']
+            self.api_info = GLO_MSG['API_CAMERA_CONNECTION_FAILURE']
             return False
-        self.__api_state_info = GLO_MSG['API_WINDOW_INITIALIZED']
+        self.api_info = GLO_MSG['API_WINDOW_INITIALIZED']
         return True
 
     def __init__(self):
-        Logger.logging.info("Init ApiWindow object")
+        super().__init__ ()
+
         self.__camera = None
         self.__tk = Tk()
         self.__tk.title("Smart Mirror")
         self.__tk.configure(background='black')
 
-        self.__api_state_info = 'NO_ERROR'
-        self.__api_state = self.__camera_connection()
+        self.api_runs = self.__camera_connection()
 
         import calendar
         a = calendar.month (2009, 12, 1,0)
@@ -86,8 +84,8 @@ class ApiWindow:
         return
 
     def __quit(self, event=None):
-        self.__api_state = False
-        self.__api_state_info = GLO_MSG['API_USER_QUIT']
+        self.api_runs = False
+        self.api_info = GLO_MSG['API_USER_QUIT']
         return
 
     def __camera_capture(self,event=None):
@@ -109,12 +107,6 @@ class ApiWindow:
         )
         return
 
-
-    def api_state_ok(self):
-        return self.__api_state
-
-    def get_state_info(self):
-        return self.__api_state_info
 
     def refresh(self):
         self.__tk.update_idletasks()

@@ -1,11 +1,10 @@
+from smartmirror.messages_handler import MessagesHandler
+from smartmirror.ui_thread import UiThread
+from smartmirror.uc_thread import UcThread
 from threading import Lock
 from queue import Queue
-from messages_handler import MessagesHandler
-import argparse
 import Logger
-from ui_thread import UiThread
-from uc_thread import UcThread
-
+import argparse
 """
     Init program properties
     - set args parameters

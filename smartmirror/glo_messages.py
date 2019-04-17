@@ -16,5 +16,5 @@ def GET_MESSAGE(message):
             return _message_str
     return None
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     pass

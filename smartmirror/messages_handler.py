@@ -1,4 +1,4 @@
-from glo_messages import GET_MESSAGE
+from smartmirror.glo_messages import GET_MESSAGE
 import Logger
 import time
 """

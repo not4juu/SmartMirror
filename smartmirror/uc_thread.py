@@ -1,8 +1,8 @@
-from glo_messages import GLO_MSG
-from glo_messages import GET_MESSAGE
+from smartmirror.glo_messages import GLO_MSG
+from smartmirror.glo_messages import GET_MESSAGE
+from smartmirror.api_command_recognition import  CommandRecognition
 from threading import Thread
-from command_recognition import  CommandRecognition
-import  Logger
+import Logger
 """
     User Command Thread
 """
@@ -21,13 +21,13 @@ class UcThread(Thread):
     def __init_command_recognition(self):
         Logger.logging.debug ("Initialize command recogniton class")
         self.__command_recognition = CommandRecognition()
-        if not self.__command_recognition.api_state_ok():
+        if not self.__command_recognition.api_runs:
             self.__close_thread = True
 
         Logger.logging.debug ("Command recogniton class state: {0}".format (
-            GET_MESSAGE(self.__command_recognition.get_state_info ())
+            GET_MESSAGE(self.__command_recognition.api_info)
         ))
-        self.__MessagesHandler.send_message(self.__command_recognition.get_state_info())
+        self.__MessagesHandler.send_message(self.__command_recognition.api_info)
 
 
     def __run_messages_handler(self):
