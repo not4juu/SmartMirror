@@ -29,7 +29,7 @@ def init_logger(outIntoFile=True, verbose=False):
     logging.addHandler(logger_consolehandler)
 
     if outIntoFile:
-        logger_filehandler = syslogger.FileHandler(filename="smartmirror_logger.log", mode="w")
+        logger_filehandler = syslogger.FileHandler(filename="smartmirror_logger.log", mode="w", encoding='utf-8')
         logger_filehandler.setLevel(level=syslogger.DEBUG)
         logger_filehandler.setFormatter(logger_formatter)
         logging.addHandler(logger_filehandler)
