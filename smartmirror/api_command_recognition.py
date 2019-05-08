@@ -38,7 +38,7 @@ class CommandRecognition(ApiState):
             Logger.logging.debug("Not available GLO_CMD command : {0}".format(command.lower ()))
         return
 
-    def run_command_rec(self):
+    def listen_command(self):
         """
             adjust the recognizer sensitivity to ambient noise and record audio
             from the microphone
@@ -48,12 +48,13 @@ class CommandRecognition(ApiState):
                 self.__recognizer.adjust_for_ambient_noise(source)
                 audio = self.__recognizer.listen(source,timeout=3)
             except speech_recognition.WaitTimeoutError as err:
-                Logger.logging.error("WaitTimeoutError : {0} ".format (err))
+                Logger.logging.warning("WaitTimeoutError : {0} ".format (err))
+                return
 
         try:
-            command =  self.__recognizer.recognize_google(audio, language = "pl-PL")
+            command = self.__recognizer.recognize_google(audio, language = "pl-PL")
             Logger.logging.debug("Recognized command : {0}".format(command))
-            self.__validate_command (command)
+            self.__validate_command(command)
 
         except UnboundLocalError as err:
             Logger.logging.error("UnboundLocalError : {0} ".format(err))
@@ -65,8 +66,8 @@ class CommandRecognition(ApiState):
 
 
 if __name__ == "__main__":
-    Logger.init_logger (outIntoFile=False, verbose=True)
+    Logger.init_logger(outIntoFile=False, verbose=True)
     r = CommandRecognition()
-    r.run_command_rec()
+    r.listen_command()
     pass
 

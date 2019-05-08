@@ -40,7 +40,7 @@ class UcThread(Thread):
         }
         message_id = self.__MessagesHandler.get_message()
         if message_id is None:
-            return message_id
+            return None
         call_handler = handler.get(message_id,
                                     lambda: self.__MessagesHandler.send_message_again(message_id))
         call_handler()
@@ -74,6 +74,7 @@ class UcThread(Thread):
         self.__wait_for_ui_init()
         while not self.__close_thread:
             self.__run_messages_handler()
+            self.__command_recognition.listen_command()
         Logger.logging.debug ("User_Command thread ends")
 
 if __name__ == "__main__":

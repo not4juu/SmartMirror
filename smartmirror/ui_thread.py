@@ -27,7 +27,7 @@ class UiThread(Thread):
         }
         message_id = self.__MessagesHandler.get_message()
         if message_id is None:
-            return message_id
+            return None
         call_handler = handler.get(message_id,
                                     lambda: self.__MessagesHandler.send_message_again(message_id))
         call_handler()
