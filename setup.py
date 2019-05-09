@@ -1,13 +1,12 @@
 from setuptools import setup
 from sys import version, exit
 
-
 if version < '3.5.0':
     print("THIS MODULE REQUIRES PYTHON 3.5.0 > YOU ARE CURRENTLY USING PYTHON {0}".format(version))
     exit(1)
 
-with open('requirements.txt') as f:
-    install_requires = f.read().strip().split('\n')
+with open('requirements.txt') as file:
+    install_requires = file.read().strip().split('\n')
 
 setup(
     name='SmartMirror',
