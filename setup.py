@@ -1,5 +1,4 @@
 from setuptools import setup
-#from pip.req import parse_requirements
 from sys import version, exit
 
 
