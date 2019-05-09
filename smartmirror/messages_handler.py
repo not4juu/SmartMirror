@@ -1,5 +1,5 @@
 from smartmirror.glo_messages import GET_MESSAGE
-import Logger
+import smartmirror.Logger as Logger
 import time
 """
     MessagesHandler class

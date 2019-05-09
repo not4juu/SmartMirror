@@ -3,7 +3,7 @@ from smartmirror.glo_messages import GET_MESSAGE
 from smartmirror.api_window import ApiWindow
 from smartmirror.network import Network
 from threading import Thread
-import Logger
+import smartmirror.Logger as Logger
 """
     User Interface Thread
 """

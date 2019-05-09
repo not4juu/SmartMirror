@@ -3,7 +3,7 @@ from smartmirror.ui_thread import UiThread
 from smartmirror.uc_thread import UcThread
 from threading import Lock
 from queue import Queue
-import Logger
+import smartmirror.Logger as Logger
 import argparse
 """
     Init program properties

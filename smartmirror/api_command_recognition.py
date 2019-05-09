@@ -2,7 +2,7 @@ from smartmirror.glo_messages import GLO_MSG
 from smartmirror.glo_commands import GLO_CMD
 from smartmirror.glo_commands import GET_COMMAND
 from smartmirror.api_state import ApiState
-import Logger
+import smartmirror.Logger as Logger
 import speech_recognition
 
 class CommandRecognition(ApiState):

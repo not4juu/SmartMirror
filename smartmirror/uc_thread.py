@@ -2,7 +2,7 @@ from smartmirror.glo_messages import GLO_MSG
 from smartmirror.glo_messages import GET_MESSAGE
 from smartmirror.api_command_recognition import  CommandRecognition
 from threading import Thread
-import Logger
+import smartmirror.Logger as Logger
 """
     User Command Thread
 """

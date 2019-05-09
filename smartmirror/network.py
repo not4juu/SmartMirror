@@ -1,5 +1,5 @@
 from smartmirror.glo_messages import GLO_MSG
-import Logger
+import smartmirror.Logger as Logger
 import socket
 
 class Network(object):

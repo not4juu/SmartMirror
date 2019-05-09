@@ -2,7 +2,7 @@ from smartmirror.glo_messages import GLO_MSG
 from smartmirror.api_state import ApiState
 from tkinter import *
 from PIL import Image, ImageTk
-import Logger
+import smartmirror.Logger as Logger
 import cv2
 """
     Aplication Window
