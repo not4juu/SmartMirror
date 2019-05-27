@@ -1,5 +1,6 @@
 from smartmirror.glo_messages import GLO_MSG
 from smartmirror.api_state import ApiState
+from smartmirror.api_clock import ApiClock
 from tkinter import *
 from PIL import Image, ImageTk
 import smartmirror.Logger as Logger
@@ -7,7 +8,6 @@ import cv2
 """
     Aplication Window
 """
-
 class ApiWindow(ApiState):
 
     def __camera_connection(self):
@@ -37,21 +37,13 @@ class ApiWindow(ApiState):
 
         self.api_runs = self.__camera_connection()
 
-        import calendar
-        a = calendar.month (2009, 12, 1,0)
+        self.topFrame = Frame(self.__tk, background='black')
+        self.topFrame.pack(side=TOP, fill=BOTH, expand=YES)
 
-        #print (a)
-        #print(calendar.calendar(2009, w=2, l=1, c=6, m=3))
+        self.__clock = ApiClock(self.topFrame)
+        self.__clock_enabled = False
+       # self.__clock.pack(side=RIGHT, anchor=N, padx=100, pady=60)
 
-        api_name = Label(
-            self.__tk, text=a, bg="black",fg="white",
-            #font=("Times", 35, "bold italic")
-            font=("Times New Roman", 10, "bold "),justify=RIGHT
-           # font=("Helvetica", 35, "bold ")
-            #font = ("Arial", 35, "bold ")
-        #Arial (corresponds to Helvetica), Courier New (Courier), Comic Sans MS, Fixedsys, MS Sans Serif, MS Serif, Symbol, System, Times New Roman (Times), and Verdana:
-        )
-        api_name.pack( side=TOP, fill=BOTH )
         self.__camera_frame = Frame(self.__tk, background='black', borderwidth=0,
                                  width=self.__camera.get (cv2.CAP_PROP_FRAME_WIDTH),
                                  heigh=self.__camera.get (cv2.CAP_PROP_FRAME_HEIGHT))
@@ -70,6 +62,17 @@ class ApiWindow(ApiState):
         #self.topFrame.pack(side = TOP, fill=BOTH, expand = YES)
         #self.bottomFrame.pack(side = BOTTOM, fill=BOTH, expand = YES)
 
+    def display_clock(self):
+        if not self.__clock_enabled:
+            self.__clock.pack(side=RIGHT, anchor=N, padx=100, pady=60)
+            self.__clock_enabled = True
+        return
+
+    def hide_clock(self):
+        if self.__clock_enabled:
+            self.__clock.pack_forget()
+            self.__clock_enabled = False
+        return
 
     def __enable_fullscreen(self, event=None):
         Logger.logging.debug ("ApiWindow full screen enabled")
@@ -106,7 +109,6 @@ class ApiWindow(ApiState):
             self.__camera.get(cv2.CAP_PROP_FRAME_WIDTH), self.__camera.get(cv2.CAP_PROP_FRAME_HEIGHT) )
         )
         return
-
 
     def refresh(self):
         self.__tk.update_idletasks()
