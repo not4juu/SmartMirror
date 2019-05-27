@@ -24,8 +24,10 @@ class UiThread(Thread):
         handler = {
             GLO_MSG['MICROPHONE_FAILURE']: self.__h_microphone_failure,
             GLO_MSG['MICROPHONE_INITIALIZED']: self.__h_microphone_initialized,
-            GLO_MSG['SHOW_WEATHER']: self.__h_show_weather,
-            GLO_MSG['SHOW_DATE']: self.__h_show_date,
+            GLO_MSG['DISPLAY_WEATHER']: self.__h_display_weather,
+            GLO_MSG['DISPLAY_DATE']: self.__h_display_date,
+            GLO_MSG['DISPLAY_CLOCK']: self.__h_display_clock,
+            GLO_MSG['HIDE_CLOCK']: self.__h_hide_clock,
         }
         message_id = self.__MessagesHandler.get_message()
         if message_id is None:
@@ -41,16 +43,23 @@ class UiThread(Thread):
     def __h_microphone_initialized(self):
         return
 
-    def __h_show_weather(self):
+    def __h_display_weather(self):
         return
 
-    def __h_show_date(self):
+    def __h_display_date(self):
         return
 
+    def __h_display_clock(self):
+        self.__window.display_clock();
+        return
+
+    def __h_hide_clock(self):
+        self.__window.hide_clock();
+        return
 
     def __init_window(self):
         self.__window = ApiWindow()
-        Logger.logging.debug ("Command recogniton class state: {0}".format(
+        Logger.logging.debug("Command recogniton class state: {0}".format(
             GET_MESSAGE(self.__window.api_info)
         ))
         self.__MessagesHandler.send_message(self.__window.api_info)
@@ -74,7 +83,7 @@ class UiThread(Thread):
             self.__run_window()
             self.__run_messages_handler()
 
-        Logger.logging.debug ("User_Interface thread ends")
+        Logger.logging.debug("User_Interface thread ends")
 
 
 if __name__ == "__main__":

@@ -30,10 +30,21 @@ class UcThread(Thread):
         self.__MessagesHandler.send_message(self.__command_recognition.api_info)
 
 
+    def __wait_for_ui_init(self):
+        Logger.logging.debug ("Wait for init network and window")
+        def ui_initialized():
+            return self.__window_initialized and self.__network_initialized
+
+        while not (ui_initialized() or self.__close_thread):
+            self.__run_messages_handler()
+
+        if ui_initialized():
+            self.__init_command_recognition()
+
     def __run_command_detection(self):
-        self.__command_recognition.listen_command()
         if self.__command_recognition.command_detected():
             self.__MessagesHandler.send_message(self.__command_recognition.get_command())
+            self.__command_recognition.clear()
 
     def __run_messages_handler(self):
         handler = {
@@ -47,7 +58,7 @@ class UcThread(Thread):
         if message_id is None:
             return None
         call_handler = handler.get(message_id,
-                                    lambda: self.__MessagesHandler.send_message_again(message_id))
+                                   lambda: self.__MessagesHandler.send_message_again(message_id))
         call_handler()
 
     def __h_network_success(self):
@@ -63,23 +74,13 @@ class UcThread(Thread):
         return
 
 
-    def __wait_for_ui_init(self):
-        Logger.logging.debug ("Wait for init network and window")
-        def ui_initialized():
-            return self.__window_initialized and self.__network_initialized
-
-        while not (ui_initialized() or self.__close_thread):
-            self.__run_messages_handler()
-
-        if ui_initialized():
-            self.__init_command_recognition()
-
     def run(self):
         Logger.logging.debug("User_Command thread runs")
         self.__wait_for_ui_init()
+        self.__command_recognition.background_listen()
         while not self.__close_thread:
-            self.__run_messages_handler()
             self.__run_command_detection()
+            self.__run_messages_handler()
         Logger.logging.debug ("User_Command thread ends")
 
 if __name__ == "__main__":
