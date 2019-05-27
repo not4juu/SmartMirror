@@ -24,6 +24,8 @@ class UiThread(Thread):
         handler = {
             GLO_MSG['MICROPHONE_FAILURE']: self.__h_microphone_failure,
             GLO_MSG['MICROPHONE_INITIALIZED']: self.__h_microphone_initialized,
+            GLO_MSG['SHOW_WEATHER']: self.__h_show_weather,
+            GLO_MSG['SHOW_DATE']: self.__h_show_date,
         }
         message_id = self.__MessagesHandler.get_message()
         if message_id is None:
@@ -37,6 +39,12 @@ class UiThread(Thread):
         return
 
     def __h_microphone_initialized(self):
+        return
+
+    def __h_show_weather(self):
+        return
+
+    def __h_show_date(self):
         return
 
 

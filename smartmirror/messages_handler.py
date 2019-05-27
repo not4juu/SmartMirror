@@ -21,6 +21,7 @@ class MessagesHandler(object):
         self.__messages_locker.acquire()
         self.__messages_queue.put(message_id)
         Logger.logging.debug("Sends : {0}".format(GET_MESSAGE(message_id)))
+        time.sleep(0.01)
         return None
     """
         Gets message from queue if queue is not empty, release locker for another message which will be adds

@@ -9,7 +9,7 @@ class CommandRecognition(ApiState):
 
     def __init__(self):
         super().__init__ ()
-        self.__command_detected = False
+        self.__clear()
 
         try:
             self.__recognizer = speech_recognition.Recognizer()
@@ -26,23 +26,31 @@ class CommandRecognition(ApiState):
             return
         self.api_info = GLO_MSG['MICROPHONE_INITIALIZED']
 
-    def get_command_detected(self):
-        return self.__command_detected
+    def __clear(self):
+        self.__command = self.__command_detected = False
 
     def __validate_command(self, command):
         if command.lower() in GLO_CMD.values():
-            Logger.logging.debug("Available GLO_CMD command : {0} -> {1}".format(
-                GET_COMMAND(command.lower()), command.lower())
-            )
+            self.__command_detected = True
+            self.__command = GET_COMMAND(command.lower())
+            Logger.logging.info("GLO_CMD command available -> {0}".format(command.lower()))
         else:
-            Logger.logging.debug("Not available GLO_CMD command : {0}".format(command.lower ()))
+            Logger.logging.info("Detected: {0}".format(command.lower ()))
         return
+
+    def get_command(self):
+        return self.__command
+
+    def command_detected(self):
+        return self.__command_detected
 
     def listen_command(self):
         """
             adjust the recognizer sensitivity to ambient noise and record audio
             from the microphone
         """
+        self.__clear()
+
         with self.__microphone as source:
             try:
                 self.__recognizer.adjust_for_ambient_noise(source)

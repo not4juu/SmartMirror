@@ -1,12 +1,15 @@
+from smartmirror.glo_messages import GLO_MSG
+
 GLO_CMD = {
-    'SHOW_WEATHER' : 'pokaż pogodę',
-    'SHOW_DATE' : 'pokaż datę',
+    GLO_MSG['SHOW_WEATHER'] : 'pogoda',
+    GLO_MSG['SHOW_DATE'] : 'data',
+    GLO_MSG['SHOW_CLOCK'] : 'godzina',
 }
 
 def GET_COMMAND(command):
-    for _command_str, _command_id in GLO_CMD.items():
-        if command == _command_id:
-            return _command_str
+    for _command_id, _command_str in GLO_CMD.items():
+        if command == _command_str:
+            return _command_id
     return None
 
 if __name__ == '__main__':

@@ -30,6 +30,11 @@ class UcThread(Thread):
         self.__MessagesHandler.send_message(self.__command_recognition.api_info)
 
 
+    def __run_command_detection(self):
+        self.__command_recognition.listen_command()
+        if self.__command_recognition.command_detected():
+            self.__MessagesHandler.send_message(self.__command_recognition.get_command())
+
     def __run_messages_handler(self):
         handler = {
             GLO_MSG['NETWORK_CONNECTION_FAILURE']: self.__h_api_window_close,
@@ -74,7 +79,7 @@ class UcThread(Thread):
         self.__wait_for_ui_init()
         while not self.__close_thread:
             self.__run_messages_handler()
-            self.__command_recognition.listen_command()
+            self.__run_command_detection()
         Logger.logging.debug ("User_Command thread ends")
 
 if __name__ == "__main__":
