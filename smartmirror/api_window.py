@@ -1,6 +1,7 @@
 from smartmirror.glo_messages import GLO_MSG
 from smartmirror.api_state import ApiState
-from smartmirror.api_clock import ApiClock
+from smartmirror.window.clock import Clock
+from smartmirror.api_settings import ApiSettings
 from tkinter import *
 from PIL import Image, ImageTk
 import smartmirror.Logger as Logger
@@ -9,6 +10,41 @@ import cv2
     Aplication Window
 """
 class ApiWindow(ApiState):
+
+    def __init__(self):
+        super().__init__()
+
+        self.__camera = None
+        self.__tk = Tk()
+        self.__tk.title("Smart Mirror")
+        self.__tk.configure(background=ApiSettings.Background)
+
+        self.api_runs = self.__camera_connection()
+
+        self.__topFrame = Frame(self.__tk, background=ApiSettings.Background)
+        self.__topFrame.pack(side=TOP, fill=BOTH, expand=YES)
+
+        self.__clock = Clock(self.__topFrame)
+        self.__clock_enabled = False
+        #self.__clock.pack(side=LEFT, anchor=N, padx=50, pady=30)
+
+        self.__camera_frame = Frame(self.__tk, background='black', borderwidth=0,
+                                 width=self.__camera.get (cv2.CAP_PROP_FRAME_WIDTH),
+                                 heigh=self.__camera.get (cv2.CAP_PROP_FRAME_HEIGHT))
+        self.__camera_frame.pack(side=TOP, expand=YES)
+
+        self.__fullscreen_enabled = False
+        self.__tk.bind("f", self.__enable_fullscreen)
+        self.__tk.bind("<Escape>", self.__disable_fullscreen)
+        self.__tk.bind("a",self.__camera_capture)
+        self.__tk.bind ("q", self.__quit)
+       # self.video.set(cv2.CAP_PROP_FRAME_HEIGHT,720)
+       # self.video.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+
+        #self.topFrame = Frame(self.tk, background = 'black')
+        #self.bottomFrame = Frame(self.tk, background = 'black')
+        #self.topFrame.pack(side = TOP, fill=BOTH, expand = YES)
+        #self.bottomFrame.pack(side = BOTTOM, fill=BOTH, expand = YES)
 
     def __camera_connection(self):
         Logger.logging.debug("Find camera connection")
@@ -27,44 +63,9 @@ class ApiWindow(ApiState):
         self.api_info = GLO_MSG['API_WINDOW_INITIALIZED']
         return True
 
-    def __init__(self):
-        super().__init__ ()
-
-        self.__camera = None
-        self.__tk = Tk()
-        self.__tk.title("Smart Mirror")
-        self.__tk.configure(background='black')
-
-        self.api_runs = self.__camera_connection()
-
-        self.topFrame = Frame(self.__tk, background='black')
-        self.topFrame.pack(side=TOP, fill=BOTH, expand=YES)
-
-        self.__clock = ApiClock(self.topFrame)
-        self.__clock_enabled = False
-       # self.__clock.pack(side=RIGHT, anchor=N, padx=100, pady=60)
-
-        self.__camera_frame = Frame(self.__tk, background='black', borderwidth=0,
-                                 width=self.__camera.get (cv2.CAP_PROP_FRAME_WIDTH),
-                                 heigh=self.__camera.get (cv2.CAP_PROP_FRAME_HEIGHT))
-        self.__camera_frame.pack(side=TOP, expand=True)
-
-        self.__fullscreen_enabled = False
-        self.__tk.bind("f", self.__enable_fullscreen)
-        self.__tk.bind("<Escape>", self.__disable_fullscreen)
-        self.__tk.bind("a",self.__camera_capture)
-        self.__tk.bind ("q", self.__quit)
-       # self.video.set(cv2.CAP_PROP_FRAME_HEIGHT,720)
-       # self.video.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-
-        #self.topFrame = Frame(self.tk, background = 'black')
-        #self.bottomFrame = Frame(self.tk, background = 'black')
-        #self.topFrame.pack(side = TOP, fill=BOTH, expand = YES)
-        #self.bottomFrame.pack(side = BOTTOM, fill=BOTH, expand = YES)
-
     def display_clock(self):
         if not self.__clock_enabled:
-            self.__clock.pack(side=RIGHT, anchor=N, padx=100, pady=60)
+            self.__clock.pack(side=LEFT, anchor=N, padx=100, pady=60)
             self.__clock_enabled = True
         return
 
