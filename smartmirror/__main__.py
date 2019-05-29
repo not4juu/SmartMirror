@@ -11,6 +11,8 @@ import smartmirror.Logger as Logger
     - set args parameters
     - init Logger buffer into file and std output
 """
+
+
 def init_properties():
     parser = ArgumentParser(
         prog = 'smartmirror',
@@ -24,11 +26,14 @@ def init_properties():
     Logger.init_logger(outIntoFile=True, verbose=args.verbose)
     Logger.logging.debug('Init properties finish successfully')
 
+
 """
     Init program threads:
     - user interface thread
     - user command thread
 """
+
+
 def init_program_threads():
     message_queue = Queue()
     message_locker = Lock()
@@ -41,12 +46,17 @@ def init_program_threads():
 
     message_queue.join()
     Logger.logging.debug('Threads starts successfully')
+
+
 """
     Main function calls by program
 """
+
+
 def main():
     init_properties()
     init_program_threads()
+
 
 if __name__ == "__main__":
     main()
