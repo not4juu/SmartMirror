@@ -11,7 +11,6 @@ import smartmirror.Logger as Logger
 
 
 class CommandsRecognition(ApiState):
-
     def __init__(self):
         super().__init__()
         self.command = None
