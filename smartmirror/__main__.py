@@ -1,17 +1,18 @@
+from argparse import ArgumentParser
+from threading import Lock
+from queue import Queue
 from smartmirror.messages_handler import MessagesHandler
 from smartmirror.ui_thread import UiThread
 from smartmirror.uc_thread import UcThread
-from threading import Lock
-from queue import Queue
 import smartmirror.Logger as Logger
-import argparse
+
 """
     Init program properties
     - set args parameters
     - init Logger buffer into file and std output
 """
 def init_properties():
-    parser = argparse.ArgumentParser(
+    parser = ArgumentParser(
         prog = 'smartmirror',
         description = 'Smart Mirror program',
         epilog =  'more detailed information in README.md file https://github.com/not4juu/SmartMirror'
