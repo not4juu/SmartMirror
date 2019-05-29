@@ -14,9 +14,7 @@ class UiThread(Thread):
         Thread.__init__(self, name="UI_Thread")
         self.__MessagesHandler = messages_handler
 
-        self.__close_thread = not Network.enabled()
-        self.__MessagesHandler.send_message(Network.get_status())
-
+        self.__close_thread = False
         self.__window = None
         Logger.logging.debug("Initialized user interface thread")
 
@@ -41,6 +39,7 @@ class UiThread(Thread):
         return
 
     def __h_microphone_initialized(self):
+        self.__window.display_microphone_enable()
         return
 
     def __h_display_weather(self):
@@ -65,6 +64,14 @@ class UiThread(Thread):
         self.__MessagesHandler.send_message(self.__window.api_info)
         return
 
+    def __network_connection(self):
+        if Network.enabled():
+            self.__window.display_wifi_enable()
+        else:
+            self.__close_thread = False
+        self.__MessagesHandler.send_message(Network.get_status())
+        return
+
     def __run_window(self):
         if not self.__window.api_runs:
             self.__close_thread = True
@@ -78,6 +85,7 @@ class UiThread(Thread):
     def run(self):
         Logger.logging.debug("User_Interface thread runs")
         self.__init_window()
+        self.__network_connection()
 
         while not self.__close_thread:
             self.__run_window()

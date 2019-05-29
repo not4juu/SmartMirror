@@ -1,14 +1,18 @@
 from smartmirror.glo_messages import GLO_MSG
 from smartmirror.api_state import ApiState
 from smartmirror.window.clock import Clock
+from smartmirror.window.news import News
+from smartmirror.window.connections import Connections
 from smartmirror.api_settings import ApiSettings
 from tkinter import *
 from PIL import Image, ImageTk
 import smartmirror.Logger as Logger
 import cv2
+
 """
     Aplication Window
 """
+
 class ApiWindow(ApiState):
 
     def __init__(self):
@@ -19,18 +23,26 @@ class ApiWindow(ApiState):
         self.__tk.title("Smart Mirror")
         self.__tk.configure(background=ApiSettings.Background)
 
-        self.api_runs = self.__camera_connection()
-
-        self.__topFrame = Frame(self.__tk, background=ApiSettings.Background)
+        self.__topFrame = Frame(self.__tk, background=ApiSettings.Background, highlightthickness=1,highlightbackground="red")
         self.__topFrame.pack(side=TOP, fill=BOTH, expand=YES)
+
+        self.__bottomFrame = Frame(self.__tk, background = ApiSettings.Background,
+                                 highlightthickness=1,highlightbackground="green")
+        self.__bottomFrame.pack(side=BOTTOM, fill=BOTH, expand=NO)
+
+        self.__conections = Connections(self.__bottomFrame)
+        self.__conections.pack(side=RIGHT, anchor=SW, padx=ApiSettings.PaddingX, pady=ApiSettings.PaddingY)
+
+        self.api_runs = self.__camera_connection()
 
         self.__clock = Clock(self.__topFrame)
         self.__clock_enabled = False
-        #self.__clock.pack(side=LEFT, anchor=N, padx=50, pady=30)
+        self.__clock.pack(side=LEFT, anchor=N, padx=ApiSettings.PaddingX, pady=ApiSettings.PaddingY)
 
-        self.__camera_frame = Frame(self.__tk, background='black', borderwidth=0,
+        self.__camera_frame = Frame(self.__tk, background=ApiSettings.Background, borderwidth=0,
                                  width=self.__camera.get (cv2.CAP_PROP_FRAME_WIDTH),
-                                 heigh=self.__camera.get (cv2.CAP_PROP_FRAME_HEIGHT))
+                                 heigh=self.__camera.get (cv2.CAP_PROP_FRAME_HEIGHT),
+                                 highlightthickness=1,highlightbackground="blue")
         self.__camera_frame.pack(side=TOP, expand=YES)
 
         self.__fullscreen_enabled = False
@@ -42,9 +54,16 @@ class ApiWindow(ApiState):
        # self.video.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
 
         #self.topFrame = Frame(self.tk, background = 'black')
-        #self.bottomFrame = Frame(self.tk, background = 'black')
-        #self.topFrame.pack(side = TOP, fill=BOTH, expand = YES)
-        #self.bottomFrame.pack(side = BOTTOM, fill=BOTH, expand = YES)
+        #self.topFrame = Frame(self.tk, background = 'black')
+
+        #self.weather = Weather(self.__topFrame)
+        #self.weather.pack(side=RIGHT, anchor=N, padx=100, pady=60)
+
+
+        #self.calender = Calendar(self.bottomFrame)
+        #self.calender.pack(side = RIGHT, anchor=S, padx=100, pady=60)
+        self.news = None
+
 
     def __camera_connection(self):
         Logger.logging.debug("Find camera connection")
@@ -60,12 +79,13 @@ class ApiWindow(ApiState):
             Logger.logging.critical("Camera hardware is not connected: {0}".format(exception))
             self.api_info = GLO_MSG['API_CAMERA_CONNECTION_FAILURE']
             return False
+        self.display_camera_enable()
         self.api_info = GLO_MSG['API_WINDOW_INITIALIZED']
         return True
 
     def display_clock(self):
         if not self.__clock_enabled:
-            self.__clock.pack(side=LEFT, anchor=N, padx=100, pady=60)
+            self.__clock.pack(side=LEFT, anchor=N, padx=20, pady=10)
             self.__clock_enabled = True
         return
 
@@ -74,6 +94,17 @@ class ApiWindow(ApiState):
             self.__clock.pack_forget()
             self.__clock_enabled = False
         return
+
+    def display_wifi_enable(self):
+        self.__conections.wifi_enable()
+        self.news = News(self.__bottomFrame)
+        self.news.pack(side=LEFT, anchor=SW, padx=ApiSettings.PaddingX, pady=ApiSettings.PaddingY)
+
+    def display_camera_enable(self):
+        self.__conections.camera_enable()
+
+    def display_microphone_enable(self):
+        self.__conections.microphone_enable()
 
     def __enable_fullscreen(self, event=None):
         Logger.logging.debug ("ApiWindow full screen enabled")

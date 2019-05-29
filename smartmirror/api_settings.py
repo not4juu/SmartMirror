@@ -7,7 +7,10 @@ class ApiSettings:
     Foreground = 'white'
     Font = 'Helvetica'
     LargeTextSize = 42
-    SmallTextSize = 14
+    MediumTextSize = 16
+    SmallTextSize = 10
+    PaddingX = 30
+    PaddingY = 10
 
 if __name__ == '__main__':
     pass
