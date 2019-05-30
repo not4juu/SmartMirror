@@ -66,15 +66,12 @@ class UcThread(Thread):
 
     def handler_network_success(self):
         self.network_enabled = True
-        return
 
     def handler_window_success(self):
         self.window_enabled = True
-        return
 
     def handler_api_window_close(self):
         self.close_thread = True
-        return
 
     def run(self):
         Logger.logging.debug("User_Command thread runs")

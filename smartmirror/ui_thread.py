@@ -57,25 +57,21 @@ class UiThread(Thread):
 
     def handler_microphone_failure(self):
         self.close_thread = True
-        return
 
     def handler_microphone_initialized(self):
         self.api_window.display_microphone_enable()
-        return
 
     def handler_display_weather(self):
-        return
+        pass
 
     def handler_display_date(self):
-        return
+        pass
 
     def handler_display_clock(self):
         self.api_window.display_clock()
-        return
 
     def handler_hide_clock(self):
         self.api_window.hide_clock()
-        return
 
     def run(self):
         Logger.logging.debug("User_Interface thread runs")
