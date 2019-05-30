@@ -1,7 +1,11 @@
 from smartmirror.glo_messages import GLO_MSG
 
-class ApiState(object):
+"""
+    ApiState Class
+"""
 
+
+class ApiState(object):
     def __init__(self):
         self.__api_runs = True
         self.__api_info = GLO_MSG['NO_ERROR']
@@ -21,6 +25,7 @@ class ApiState(object):
     @api_info.setter
     def api_info(self, api_info):
         self.__api_info = api_info
+
 
 if __name__ == '__main__':
     pass

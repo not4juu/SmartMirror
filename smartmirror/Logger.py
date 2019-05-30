@@ -6,7 +6,8 @@ Creates a singleton instance for program Logger buffer
 """
 initialized = False
 
-def init_logger(outIntoFile=True, verbose=False):
+
+def init_logger(logs_to_file=True, verbose=False):
 
     global logging
     global initialized
@@ -18,27 +19,27 @@ def init_logger(outIntoFile=True, verbose=False):
     logging = syslogger.getLogger(name="SmartMirror_Logger")
     logging.setLevel(level=syslogger.DEBUG)
     logger_formatter = syslogger.Formatter(
-        '[%(asctime)s:%(threadName)s:%(module)s:%(lineno)s:%(levelname)s] %(message)s'
-    )
+        '[%(asctime)s:%(threadName)s:%(module)s:%(lineno)s:%(levelname)s] %(message)s')
 
-    logger_consolehandler = syslogger.StreamHandler(sys.stdout)
-    logger_consolehandler.setLevel(
-        level = syslogger.DEBUG if verbose else syslogger.INFO
-    )
-    logger_consolehandler.setFormatter(logger_formatter)
-    logging.addHandler(logger_consolehandler)
+    logger_console_handler = syslogger.StreamHandler(sys.stdout)
+    logger_console_handler.setLevel(
+        level=syslogger.DEBUG if verbose else syslogger.INFO)
 
-    if outIntoFile:
-        logger_filehandler = syslogger.FileHandler(filename="smartmirror_logger.log", mode="w", encoding='utf-8')
-        logger_filehandler.setLevel(level=syslogger.DEBUG)
-        logger_filehandler.setFormatter(logger_formatter)
-        logging.addHandler(logger_filehandler)
+    logger_console_handler.setFormatter(logger_formatter)
+    logging.addHandler(logger_console_handler)
+
+    if logs_to_file:
+        logger_file_handler = syslogger.FileHandler(filename="smartmirror_logger.log", mode="w", encoding='utf-8')
+        logger_file_handler.setLevel(level=syslogger.DEBUG)
+        logger_file_handler.setFormatter(logger_formatter)
+        logging.addHandler(logger_file_handler)
 
     initialized = True
     logging.info("Logger has been created successfully outfile: {0} verbose: {1}".format(
-        outIntoFile, verbose))
+        logs_to_file, verbose))
 
     return 0
+
 
 if __name__ == "__main__":
     pass

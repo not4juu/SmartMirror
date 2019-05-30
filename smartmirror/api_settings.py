@@ -2,6 +2,7 @@
     Static Window Api Settings Class
 """
 
+
 class ApiSettings:
     Background = 'black'
     Foreground = 'white'
@@ -11,6 +12,7 @@ class ApiSettings:
     SmallTextSize = 10
     PaddingX = 30
     PaddingY = 10
+
 
 if __name__ == '__main__':
     pass
