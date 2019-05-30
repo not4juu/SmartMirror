@@ -15,15 +15,15 @@ import smartmirror.Logger as Logger
 
 def init_properties():
     parser = ArgumentParser(
-        prog = 'smartmirror',
-        description = 'Smart Mirror program',
-        epilog =  'more detailed information in README.md file https://github.com/not4juu/SmartMirror'
+        prog='smartmirror',
+        description='Smart Mirror program',
+        epilog='more detailed information in README.md file https://github.com/not4juu/SmartMirror'
     )
     parser.add_argument('-v', '--verbose', action='count', help='show verbose logs on console')
     parser.add_argument('--version', action='version', version='%(prog)s 1.0.0')
     args = parser.parse_args()
 
-    Logger.init_logger(outIntoFile=True, verbose=args.verbose)
+    Logger.init_logger(logs_to_file=True, verbose=args.verbose)
     Logger.logging.debug('Init properties finish successfully')
 
 
@@ -37,11 +37,11 @@ def init_properties():
 def init_program_threads():
     message_queue = Queue()
     message_locker = Lock()
-    message_handler = MessagesHandler(messages_queue = message_queue, messages_locker = message_locker)
+    message_handler = MessagesHandler(messages_queue=message_queue, messages_locker=message_locker)
 
-    main_ui_thread = UiThread(messages_handler = message_handler)
+    main_ui_thread = UiThread(messages_handler=message_handler)
     main_ui_thread.start()
-    main_uc_thread = UcThread(messages_handler = message_handler)
+    main_uc_thread = UcThread(messages_handler=message_handler)
     main_uc_thread.start()
 
     message_queue.join()
