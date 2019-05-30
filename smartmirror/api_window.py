@@ -282,7 +282,7 @@ class ApiWindow(ApiState):
     def refresh(self):
         self.__tk.update_idletasks()
         self.__tk.update()
-        return
+        return None
 
 
 if __name__ == "__main__":

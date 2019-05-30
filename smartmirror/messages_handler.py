@@ -1,6 +1,6 @@
+from time import sleep
 from smartmirror.glo_messages import GET_MESSAGE
 import smartmirror.Logger as Logger
-import time
 """
     MessagesHandler class
     - manages program communication based on defined messages,
@@ -8,20 +8,19 @@ import time
     - lets only one message to be sends by pipeline (queue) utilizing a lock features 
 """
 
-class MessagesHandler(object):
 
+class MessagesHandler(object):
     def __init__(self, messages_queue, messages_locker):
         self.__messages_queue = messages_queue
-        self.__messages_locker =  messages_locker
+        self.__messages_locker = messages_locker
         Logger.logging.debug("Initialized a Messages Handler object")
     """
-        Sends (put) the message into queue and lock the queue until somone will pick up it
+        Sends (put) the message into queue and lock the queue until someone will pick up it
     """
     def send_message(self, message_id):
         self.__messages_locker.acquire()
         self.__messages_queue.put(message_id)
         Logger.logging.debug("Sends : {0}".format(GET_MESSAGE(message_id)))
-        time.sleep(0.01)
         return None
     """
         Gets message from queue if queue is not empty, release locker for another message which will be adds
@@ -43,12 +42,12 @@ class MessagesHandler(object):
         
         It is some protection case - does not let program infinite loop
     """
-    def send_message_again(self,message_id):
-        Logger.logging.debug (
-            "Message \"{0}\" no reference handler".format(GET_MESSAGE(message_id)))
+    def send_message_again(self, message_id):
+        Logger.logging.debug("Message \"{0}\" no reference handler".format(GET_MESSAGE(message_id)))
         self.send_message(message_id)
-        time.sleep(0.05)
+        sleep(0.05)
         return None
+
 
 if __name__ == "__main__":
     pass

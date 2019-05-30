@@ -25,8 +25,8 @@ def setlocale(name): #thread proof function to work with locale
 class Clock(Frame):
     def __init__(self, parent):
         Frame.__init__(self, parent, bg=ApiSettings.Background)
-        self.__time_format = 24
-        self.__date_format = "  %A : %d %B %Y"
+        self.time_format = 24
+        self.date_format = "  %A : %d %B %Y"
 
         self.time = ''
         self.time_label = Label(self, font=(ApiSettings.Font, ApiSettings.LargeTextSize),
@@ -43,8 +43,8 @@ class Clock(Frame):
 
     def tick(self):
         with setlocale(""):
-            current_time = strftime('%I:%M:%S %p') if self.__time_format == 12 else strftime('%H:%M:%S')
-            current_date = strftime(self.__date_format)
+            current_time = strftime('%I:%M:%S %p') if self.time_format == 12 else strftime('%H:%M:%S')
+            current_date = strftime(self.date_format)
 
             if current_time != self.time:
                 self.time = current_time

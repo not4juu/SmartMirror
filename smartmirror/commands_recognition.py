@@ -38,6 +38,7 @@ class CommandsRecognition(ApiState):
             self.api_runs = False
             self.api_info = GLO_MSG['MICROPHONE_FAILURE']
             return
+        Logger.logging.debug("Initialization of CommandsRecognition class")
         self.api_info = GLO_MSG['MICROPHONE_INITIALIZED']
 
     def get_command(self):
@@ -47,6 +48,7 @@ class CommandsRecognition(ApiState):
         return self.command_detected
 
     def clear(self):
+        Logger.logging.debug("Clear commands")
         self.command = None
         self.command_detected = False
 
@@ -57,7 +59,6 @@ class CommandsRecognition(ApiState):
             Logger.logging.info("GLO_CMD command available -> {0}".format(command.lower()))
         else:
             Logger.logging.info("Detected command: {0}".format(command.lower()))
-        return
 
     def callback_recognition(self, recognizer, audio):
         try:
@@ -68,8 +69,7 @@ class CommandsRecognition(ApiState):
         except RequestError as err:
             Logger.logging.warning("RequestError : {0} ".format(err))
         except UnknownValueError as err:
-            Logger.logging.warning("UnknownValueError : {0} ".format(err))
-        return
+            Logger.logging.debug("UnknownValueError : {0} ".format(err))
 
     def background_listen(self):
         self.listen_thread = self.recognizer.listen_in_background(

@@ -60,4 +60,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-    Logger.logging.debug('__main__ Ends')
+    Logger.logging.info(__name__ + " ends")

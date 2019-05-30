@@ -40,8 +40,7 @@ class UcThread(Thread):
             self.close_thread = True
 
         Logger.logging.debug("Command recognition class state: {0}".format(
-            GET_MESSAGE(self.command_recognition.api_info)
-        ))
+            GET_MESSAGE(self.command_recognition.api_info)))
         self.MessagesHandler.send_message(self.command_recognition.api_info)
 
     def run_command_detection(self):
@@ -62,6 +61,7 @@ class UcThread(Thread):
             return message_id
         call_handler = handler.get(
             message_id, lambda: self.MessagesHandler.send_message_again(message_id))
+        Logger.logging.debug(call_handler.__name__)
         call_handler()
 
     def handler_network_success(self):
@@ -73,7 +73,6 @@ class UcThread(Thread):
         return
 
     def handler_api_window_close(self):
-        Logger.logging.debug("Close user command thread")
         self.close_thread = True
         return
 
