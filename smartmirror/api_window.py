@@ -58,11 +58,8 @@ class ApiWindow(ApiState):
             self.display_camera(enable_camera=True)
 
         self.clock = Clock(self.top_frame)
-        self.clock.pack(side=LEFT, anchor=N, padx=ApiSettings.PaddingX, pady=ApiSettings.PaddingY)
-        self.clock_enabled = False
-
-        self.weather = Weather(self.top_frame)
-        self.weather.pack(side=RIGHT, anchor=NE, padx=ApiSettings.PaddingX, pady=ApiSettings.PaddingY)
+        self.clock_displayed = False
+        self.clock_view(display=True)
 
         self.camera_frame = Frame(self.center_frame, background=ApiSettings.Background,
                                   width=self.camera.get(cv2.CAP_PROP_FRAME_WIDTH),
@@ -70,7 +67,11 @@ class ApiWindow(ApiState):
         self.camera_frame.pack(side=TOP, expand=YES)
         self.camera_label = Label(self.camera_frame, borderwidth=0)
 
+        self.weather = None
+        self.weather_displayed = False
+
         self.news = None
+        self.news_displayed = False
 
     def camera_connection(self):
         Logger.logging.debug("Find camera connection")
@@ -124,12 +125,22 @@ class ApiWindow(ApiState):
                 self.camera.get(cv2.CAP_PROP_FRAME_WIDTH), self.camera.get(cv2.CAP_PROP_FRAME_HEIGHT)))
 
     """
+        Initialization of classes with network dependency
+    """
+    def init_network_dependency(self):
+        if self.weather is None:
+            self.weather = Weather(self.top_frame)
+            self.weather_view(display=True)
+
+        if self.news is None:
+            self.news = News(self.bottom_frame)
+            self.news_view(display=True)
+
+    """
         Api icons menu bar enabler
     """
     def display_wifi(self, enable_wifi):
         self.connections_menu.wifi(enable_wifi)
-        self.news = News(self.bottom_frame)
-        self.news.pack(side=LEFT, anchor=SW, padx=ApiSettings.PaddingX, pady=ApiSettings.PaddingY)
 
     def display_camera(self, enable_camera):
         self.connections_menu.camera(enable_camera)
@@ -140,15 +151,23 @@ class ApiWindow(ApiState):
     """
         Clock enabler/disabler
     """
-    def display_clock(self):
-        if not self.clock_enabled:
-            self.clock.pack(side=LEFT, anchor=N, padx=20, pady=10)
-            self.clock_enabled = True
+    def clock_view(self, display):
+        if self.clock_displayed != display:
+            self.clock.pack(side=LEFT, anchor=N, padx=ApiSettings.PaddingX, pady=ApiSettings.PaddingY) \
+                if display else self.clock.pack_forget()
+            self.clock_displayed = not self.clock_displayed
 
-    def hide_clock(self):
-        if self.clock_enabled:
-            self.clock.pack_forget()
-            self.clock_enabled = False
+    def news_view(self, display):
+        if self.news_displayed != display:
+            self.news.pack(side=LEFT, anchor=SW, padx=ApiSettings.PaddingX, pady=ApiSettings.PaddingY) \
+                if display else self.news.pack_forget()
+            self.news_displayed = not self.news_displayed
+
+    def weather_view(self, display):
+        if self.weather_displayed != display:
+            self.weather.pack(side=RIGHT, anchor=NE, padx=ApiSettings.PaddingX, pady=ApiSettings.PaddingY) \
+                if display else self.weather.pack_forget()
+            self.weather_displayed = not self.weather_displayed
 
 
 if __name__ == "__main__":

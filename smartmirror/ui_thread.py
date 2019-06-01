@@ -25,6 +25,7 @@ class UiThread(Thread):
 
     def network_connection(self):
         if Network.enabled():
+            self.api_window.init_network_dependency()
             self.api_window.display_wifi(enable_wifi=True)
         else:
             self.close_thread = False
@@ -68,10 +69,10 @@ class UiThread(Thread):
         pass
 
     def handler_display_clock(self):
-        self.api_window.display_clock()
+        self.api_window.clock_view(display=True)
 
     def handler_hide_clock(self):
-        self.api_window.hide_clock()
+        self.api_window.clock_view(display=False)
 
     def run(self):
         Logger.logging.debug("User_Interface thread runs")
