@@ -149,7 +149,7 @@ class ApiWindow(ApiState):
         self.connections_menu.microphone(enable_microphone)
 
     """
-        Clock enabler/disabler
+        Displays an api features interface
     """
     def clock_view(self, display):
         if self.clock_displayed != display:
