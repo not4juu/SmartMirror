@@ -40,6 +40,7 @@ class News(Frame):
             if len(self.news_list) < self.headlines_iterator:
                 self.headlines_iterator = 0
         self.headlines_iterator -= self.display_news_number - 1
+        # updates every 10s
         self.after(10 * 1000, self.refresh_headlines)
 
     def get_headlines(self):
@@ -48,6 +49,7 @@ class News(Frame):
             Logger.logging.info("Get number of news: {0} from: {1}".format(len(self.news_list), self.news_url))
         except Exception as err:
             Logger.logging.critical("News exception: {0}".format(err))
+        # updates every hour
         self.after(60 * 60 * 1000, self.get_headlines)
 
 

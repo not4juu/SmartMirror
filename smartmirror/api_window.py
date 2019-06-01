@@ -2,6 +2,7 @@ from smartmirror.glo_messages import GLO_MSG
 from smartmirror.api_state import ApiState
 from smartmirror.window.clock import Clock
 from smartmirror.window.news import News
+from smartmirror.window.weather import Weather
 from smartmirror.window.connections import Connections
 from smartmirror.api_settings import ApiSettings
 from tkinter import *
@@ -10,148 +11,12 @@ import smartmirror.Logger as Logger
 import cv2
 
 """
-    Aplication Window
+    Application Window
+    icons downloaded from: https://icons8.com/
 """
 
 
-import requests
-import json
-
-icon_lookup = {
-    'clear-day': "Newspaper.png",  # clear sky day
-    'wind': "Newspaper.png",   #wind
-    'cloudy': "Newspaper.png",  # cloudy day
-    'partly-cloudy-day': "Newspaper.png",  # partly cloudy day
-    'rain': "Newspaper.png",  # rain day
-    'snow': "Newspaper.png",  # snow day
-    'snow-thin': "Newspaper.png",  # sleet day
-    'fog': "Newspaper.png",  # fog day
-    'clear-night': "Newspaper.png",  # clear sky night
-    'partly-cloudy-night': "Newspaper.png",  # scattered clouds night
-    'thunderstorm': "Newspaper.png",  # thunderstorm
-    'tornado': "Newspaper.png",    # tornado
-    'hail': "Newspaper.png"  # hail
-}
-
-weather_lang = 'en' # see https://darksky.net/dev/docs/forecast for full list of language parameters values
-weather_unit = 'us' # see https://darksky.net/dev/docs/forecast for full list of unit parameters values
-latitude = None # Set this if IP location lookup does not work for you (must be a string)
-longitude = None # Set this if IP location lookup does not work for you (must be a string)
-xlarge_text_size = 94
-large_text_size = 48
-medium_text_size = 28
-small_text_size = 18
-weather_api_token = 'c6da61aaa99fb6c6e4d0dc5276b488ec' # create account at https://darksky.net/dev/
-
-class Weather(Frame):
-    def __init__(self, parent, *args, **kwargs):
-        Frame.__init__(self, parent, bg='black')
-        self.temperature = ''
-        self.forecast = ''
-        self.location = ''
-        self.currently = ''
-        self.icon = ''
-        self.degreeFrm = Frame(self, bg="black")
-        self.degreeFrm.pack(side=TOP, anchor=W)
-        self.temperatureLbl = Label(self.degreeFrm, font=('Helvetica', xlarge_text_size), fg="white", bg="black")
-        self.temperatureLbl.pack(side=LEFT, anchor=N)
-        self.iconLbl = Label(self.degreeFrm, bg="black")
-        self.iconLbl.pack(side=LEFT, anchor=N, padx=20)
-        self.currentlyLbl = Label(self, font=('Helvetica', medium_text_size), fg="white", bg="black")
-        self.currentlyLbl.pack(side=TOP, anchor=W)
-        self.forecastLbl = Label(self, font=('Helvetica', small_text_size), fg="white", bg="black")
-        self.forecastLbl.pack(side=TOP, anchor=W)
-        self.locationLbl = Label(self, font=('Helvetica', small_text_size), fg="white", bg="black")
-        self.locationLbl.pack(side=TOP, anchor=W)
-        self.get_weather()
-
-    def get_ip(self):
-        try:
-            ip_url = "http://jsonip.com/"
-            req = requests.get(ip_url)
-            ip_json = json.loads(req.text)
-            return ip_json['ip']
-        except Exception as err:
-            Logger.logging.critical("Exception: {0}".format(err))
-
-    def get_weather(self):
-        try:
-
-            if latitude is None and longitude is None:
-                # get location
-                location_req_url = "http://freegeoip.net/json/%s" % self.get_ip()
-                r = requests.get(location_req_url)
-                location_obj = json.loads(r.text)
-
-                lat = location_obj['latitude']
-                lon = location_obj['longitude']
-
-                location2 = "%s, %s" % (location_obj['city'], location_obj['region_code'])
-
-                # get weather
-                weather_req_url = "https://api.darksky.net/forecast/%s/%s,%s?lang=%s&units=%s" % (weather_api_token, lat,lon,weather_lang,weather_unit)
-            else:
-                location2 = ""
-                # get weather
-                weather_req_url = "https://api.darksky.net/forecast/%s/%s,%s?lang=%s&units=%s" % (weather_api_token, latitude, longitude, weather_lang, weather_unit)
-
-            r = requests.get(weather_req_url)
-            weather_obj = json.loads(r.text)
-
-            degree_sign= u'\N{DEGREE SIGN}'
-            temperature2 = "%s%s" % (str(int(weather_obj['currently']['temperature'])), degree_sign)
-            currently2 = weather_obj['currently']['summary']
-            forecast2 = weather_obj["hourly"]["summary"]
-
-            icon_id = weather_obj['currently']['icon']
-            icon2 = None
-
-            if icon_id in icon_lookup:
-                icon2 = icon_lookup[icon_id]
-
-            if icon2 is not None:
-                if self.icon != icon2:
-                    self.icon = icon2
-                    image = Image.open(icon2)
-                    image = image.resize((100, 100), Image.ANTIALIAS)
-                    image = image.convert('RGB')
-                    photo = ImageTk.PhotoImage(image)
-
-                    self.iconLbl.config(image=photo)
-                    self.iconLbl.image = photo
-            else:
-                # remove image
-                self.iconLbl.config(image='')
-
-            if self.currently != currently2:
-                self.currently = currently2
-                self.currentlyLbl.config(text=currently2)
-            if self.forecast != forecast2:
-                self.forecast = forecast2
-                self.forecastLbl.config(text=forecast2)
-            if self.temperature != temperature2:
-                self.temperature = temperature2
-                self.temperatureLbl.config(text=temperature2)
-            if self.location != location2:
-                if location2 == ", ":
-                    self.location = "Cannot Pinpoint Location"
-                    self.locationLbl.config(text="Cannot Pinpoint Location")
-                else:
-                    self.location = location2
-                    self.locationLbl.config(text=location2)
-        except Exception as err:
-            Logger.logging.critical("Exception: {0}".format(err))
-
-        self.after(600000, self.get_weather)
-
-    @staticmethod
-    def convert_kelvin_to_fahrenheit(kelvin_temp):
-        return 1.8 * (kelvin_temp - 273) + 32
-
-
-
 class ApiWindow(ApiState):
-
     def __init__(self):
         super().__init__()
 
@@ -163,8 +28,8 @@ class ApiWindow(ApiState):
         self.__topFrame = Frame(self.__tk, background=ApiSettings.Background, highlightthickness=1,highlightbackground="red")
         self.__topFrame.pack(side=TOP, fill=BOTH, expand=YES)
 
-        self.__bottomFrame = Frame(self.__tk, background = ApiSettings.Background,
-                                 highlightthickness=1,highlightbackground="green")
+        self.__bottomFrame = Frame(self.__tk, background=ApiSettings.Background,
+                                   highlightthickness=1,highlightbackground="green")
         self.__bottomFrame.pack(side=BOTTOM, fill=BOTH, expand=NO)
 
         self.__conections = Connections(self.__bottomFrame)
@@ -193,8 +58,8 @@ class ApiWindow(ApiState):
         #self.topFrame = Frame(self.tk, background = 'black')
         #self.topFrame = Frame(self.tk, background = 'black')
 
-        #self.weather = Weather(self.__topFrame)
-        #self.weather.pack(side=RIGHT, anchor=N, padx=100, pady=60)
+        self.weather = Weather(self.__topFrame)
+        self.weather.pack(side=RIGHT, anchor=NE, padx=ApiSettings.PaddingX, pady=ApiSettings.PaddingY)
 
 
         #self.calender = Calendar(self.bottomFrame)

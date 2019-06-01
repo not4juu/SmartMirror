@@ -1,4 +1,6 @@
 import socket
+import requests
+import json
 from smartmirror.glo_messages import GLO_MSG
 import smartmirror.Logger as Logger
 """
@@ -45,6 +47,32 @@ class Network(object):
     @staticmethod
     def get_status():
         return network_status
+
+    @staticmethod
+    def get_ip():
+        try:
+            ip_reg_url = "http://jsonip.com/"
+            response = requests.get(ip_reg_url)
+            ip_json = json.loads(response.text)
+            Logger.logging.debug("request: " + str(ip_reg_url) + " response: " + str(response)
+                                 + " json: " + str(ip_json))
+            return ip_json['ip']
+        except Exception as err:
+            Logger.logging.critical("Exception: {0}".format(err))
+            return None
+
+    @staticmethod
+    def get_location():
+        try:
+            location_req_url = "http://ip-api.com/json/{0}".format(Network.get_ip())
+            response = requests.get(location_req_url)
+            location_json = json.loads(response.text)
+            Logger.logging.debug("request: " + str(location_req_url) + " response: " + str(response)
+                                 + " json: " + str(location_json))
+            return location_json
+        except Exception as err:
+            Logger.logging.critical("Exception: {0}".format(err))
+            return None
 
 
 if __name__ == "__main__":
