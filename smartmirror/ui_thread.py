@@ -44,7 +44,9 @@ class UiThread(Thread):
             GLO_MSG['MICROPHONE_FAILURE']: self.handler_microphone_failure,
             GLO_MSG['MICROPHONE_INITIALIZED']: self.handler_microphone_initialized,
             GLO_MSG['DISPLAY_WEATHER']: self.handler_display_weather,
-            GLO_MSG['DISPLAY_DATE']: self.handler_display_date,
+            GLO_MSG['HIDE_WEATHER']: self.handler_hide_weather,
+            GLO_MSG['DISPLAY_NEWS']: self.handler_display_news,
+            GLO_MSG['HIDE_NEWS']: self.handler_hide_news,
             GLO_MSG['DISPLAY_CLOCK']: self.handler_display_clock,
             GLO_MSG['HIDE_CLOCK']: self.handler_hide_clock,
         }
@@ -63,10 +65,16 @@ class UiThread(Thread):
         self.api_window.display_microphone(enable_microphone=True)
 
     def handler_display_weather(self):
-        pass
+        self.api_window.weather_view(display=True)
 
-    def handler_display_date(self):
-        pass
+    def handler_hide_weather(self):
+        self.api_window.weather_view(display=False)
+
+    def handler_display_news(self):
+        self.api_window.news_view(display=True)
+
+    def handler_hide_news(self):
+        self.api_window.news_view(display=False)
 
     def handler_display_clock(self):
         self.api_window.clock_view(display=True)
