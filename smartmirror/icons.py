@@ -3,7 +3,7 @@
 """
 
 icons = {
-#   Api menu icons
+    # Api menu icons
     "news": "icons/news.png",
     "camera_disabled": "icons/camera_disabled.png",
     "camera_enabled": "icons/camera_enabled.png",
@@ -11,7 +11,7 @@ icons = {
     "microphone_enabled": "icons/microphone_enabled.png",
     "wifi_disabled": "icons/wifi_disabled.png",
     "wifi_enabled": "icons/wifi_enabled.png",
-#   Weather icons
+    # Weather icons
     "clear-day": "icons/weather/clear_day.png",
     "clear-night": "icons/weather/clear_night.png",
     "rain": "icons/weather/rain.png",
