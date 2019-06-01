@@ -1,5 +1,7 @@
 """
     Icons dictionary definition
+
+    icons have been downloaded from: https://icons8.com/
 """
 
 icons = {
