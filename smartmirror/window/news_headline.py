@@ -1,6 +1,7 @@
 from tkinter import *
 from PIL import Image, ImageTk
 from smartmirror.api_settings import ApiSettings
+from smartmirror.icons import icons
 import smartmirror.Logger as Logger
 """
     News Headline Class
@@ -11,7 +12,7 @@ class NewsHeadline(Frame):
     def __init__(self, parent):
         Frame.__init__(self, parent, bg=ApiSettings.Background)
 
-        image = Image.open("icons/news.png")
+        image = Image.open(icons["news"])
         image = image.resize((20, 20), Image.ANTIALIAS)
         image = image.convert('RGB')
         photo = ImageTk.PhotoImage(image)

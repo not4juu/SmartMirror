@@ -7,6 +7,7 @@ class ApiSettings:
     Background = 'black'
     Foreground = 'white'
     Font = 'Helvetica'
+    HugeTextSize = 82
     LargeTextSize = 42
     MediumTextSize = 16
     SmallTextSize = 10

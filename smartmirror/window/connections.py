@@ -1,6 +1,7 @@
 from tkinter import *
 from PIL import Image, ImageTk
 from smartmirror.api_settings import ApiSettings
+from smartmirror.icons import icons
 import smartmirror.Logger as Logger
 """
     Connections Class
@@ -16,18 +17,18 @@ class Connections(Frame):
         self.connections_container = Frame(self, bg=ApiSettings.Background, highlightthickness=1,highlightbackground="yellow")
         self.connections_container.pack(side=RIGHT, anchor=SE)
 
-        wifi_disable_image = Image.open("icons/wifi_disable.png")
-        wifi_enable_image = Image.open("icons/wifi_enable.png")
+        wifi_disable_image = Image.open(icons["wifi_disabled"])
+        wifi_enable_image = Image.open(icons["wifi_enabled"])
         self.wifi_disable_icon = ImageTk.PhotoImage(wifi_disable_image.resize((self.resizeX, self.resizeY), Image.ANTIALIAS).convert('RGB'))
         self.wifi_enable_icon = ImageTk.PhotoImage(wifi_enable_image.resize((self.resizeX, self.resizeY), Image.ANTIALIAS).convert('RGB'))
 
-        camera_disable_image = Image.open("icons/camera_disable.png")
-        camera_enable_image = Image.open("icons/camera_enable.png")
+        camera_disable_image = Image.open(icons["camera_disabled"])
+        camera_enable_image = Image.open(icons["camera_enabled"])
         self.camera_disable_icon = ImageTk.PhotoImage(camera_disable_image.resize((self.resizeX, self.resizeY), Image.ANTIALIAS).convert('RGB'))
         self.camera_enable_icon = ImageTk.PhotoImage(camera_enable_image.resize((self.resizeX, self.resizeY), Image.ANTIALIAS).convert('RGB'))
 
-        microphone_disable_image = Image.open("icons/microphone_disable.png")
-        microphone_enable_image = Image.open("icons/microphone_enabled.png")
+        microphone_disable_image = Image.open(icons["microphone_disabled"])
+        microphone_enable_image = Image.open(icons["microphone_enabled"])
         self.microphone_disable_icon = ImageTk.PhotoImage(microphone_disable_image.resize((self.resizeX, self.resizeY), Image.ANTIALIAS).convert('RGB'))
         self.microphone_enable_icon = ImageTk.PhotoImage(microphone_enable_image.resize((self.resizeX, self.resizeY), Image.ANTIALIAS).convert('RGB'))
 
