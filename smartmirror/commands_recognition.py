@@ -17,6 +17,7 @@ class CommandsRecognition(ApiState):
         self.command_detected = False
         self.listen_thread = None
         self.language = "pl-PL"
+        self.phrase_time_limit = None
 
         try:
             self.recognizer = Recognizer()
@@ -73,7 +74,7 @@ class CommandsRecognition(ApiState):
 
     def background_listen(self):
         self.listen_thread = self.recognizer.listen_in_background(
-            source=self.microphone, callback=self.callback_recognition, phrase_time_limit=5)
+            source=self.microphone, callback=self.callback_recognition, phrase_time_limit=self.phrase_time_limit)
 
 
 if __name__ == "__main__":
