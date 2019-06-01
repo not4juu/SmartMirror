@@ -25,7 +25,7 @@ class UiThread(Thread):
 
     def network_connection(self):
         if Network.enabled():
-            self.api_window.display_wifi_enable()
+            self.api_window.display_wifi(enable_wifi=True)
         else:
             self.close_thread = False
         self.MessagesHandler.send_message(Network.get_status())
@@ -59,7 +59,7 @@ class UiThread(Thread):
         self.close_thread = True
 
     def handler_microphone_initialized(self):
-        self.api_window.display_microphone_enable()
+        self.api_window.display_microphone(enable_microphone=True)
 
     def handler_display_weather(self):
         pass

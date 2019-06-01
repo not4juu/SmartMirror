@@ -6,7 +6,7 @@ from smartmirror.api_state import ApiState
 from smartmirror.window.clock import Clock
 from smartmirror.window.news import News
 from smartmirror.window.weather import Weather
-from smartmirror.window.connections import Connections
+from smartmirror.window.connections_menu import ConnectionsMenu
 from smartmirror.api_settings import ApiSettings
 import smartmirror.Logger as Logger
 """
@@ -51,14 +51,14 @@ class ApiWindow(ApiState):
         """
             Initialization of api window features
         """
-        self.connections = Connections(self.bottom_frame)
-        self.connections.pack(side=RIGHT, anchor=SW, padx=ApiSettings.PaddingX, pady=ApiSettings.PaddingY)
+        self.connections_menu = ConnectionsMenu(self.bottom_frame)
+        self.connections_menu.pack(side=RIGHT, anchor=SW, padx=ApiSettings.PaddingX, pady=ApiSettings.PaddingY)
 
         if self.api_runs:
-            self.display_camera_enable()
+            self.display_camera(enable_camera=True)
 
         self.clock = Clock(self.top_frame)
-        self.clock.pack(side=LEFT, anchor=NW, padx=ApiSettings.PaddingX, pady=ApiSettings.PaddingY)
+        self.clock.pack(side=LEFT, anchor=N, padx=ApiSettings.PaddingX, pady=ApiSettings.PaddingY)
         self.clock_enabled = False
 
         self.weather = Weather(self.top_frame)
@@ -126,16 +126,16 @@ class ApiWindow(ApiState):
     """
         Api icons menu bar enabler
     """
-    def display_wifi_enable(self):
-        self.connections.wifi_enable()
+    def display_wifi(self, enable_wifi):
+        self.connections_menu.wifi(enable_wifi)
         self.news = News(self.bottom_frame)
         self.news.pack(side=LEFT, anchor=SW, padx=ApiSettings.PaddingX, pady=ApiSettings.PaddingY)
 
-    def display_camera_enable(self):
-        self.connections.camera_enable()
+    def display_camera(self, enable_camera):
+        self.connections_menu.camera(enable_camera)
 
-    def display_microphone_enable(self):
-        self.connections.microphone_enable()
+    def display_microphone(self, enable_microphone):
+        self.connections_menu.microphone(enable_microphone)
 
     """
         Clock enabler/disabler
