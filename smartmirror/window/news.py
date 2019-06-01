@@ -17,8 +17,7 @@ class News(Frame):
         self.news_list = None
         self.news_url = "https://news.google.com/rss?hl=pl&gl=PL&ceid=PL:pl"
 
-        self.headlines_container = Frame(self, bg=ApiSettings.Background,
-                                         highlightthickness=1, highlightbackground="yellow")
+        self.headlines_container = Frame(self, bg=ApiSettings.Background)
         self.headlines_container.pack(side=TOP)
 
         self.display_news_number = 5

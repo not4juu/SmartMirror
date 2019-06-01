@@ -15,15 +15,15 @@ import smartmirror.Logger as Logger
 
 class Weather(Frame):
     def __init__(self, parent):
-        Frame.__init__(self, parent, bg=ApiSettings.Background, highlightthickness=1, highlightbackground="green")
-        self.weather_api_token = '' # token from https://darksky.net/dev/ account
+        Frame.__init__(self, parent, bg=ApiSettings.Background)
+        self.weather_api_token = ''  # token from https://darksky.net/dev/ account
         self.location_info = None
         self.weather_info = None
         self.weather_lang = 'pl'
         self.weather_unit = 'auto'
         self.weather_icon = None
 
-        self.degree_frame = Frame(self, bg=ApiSettings.Background, highlightthickness=1, highlightbackground="blue")
+        self.degree_frame = Frame(self, bg=ApiSettings.Background)
         self.degree_frame.pack(side=TOP, anchor=E)
         self.temperature_label = Label(self.degree_frame, font=(ApiSettings.Font, ApiSettings.HugeTextSize),
                                        fg=ApiSettings.Foreground, bg=ApiSettings.Background)
