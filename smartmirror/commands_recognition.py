@@ -17,7 +17,7 @@ class CommandsRecognition(ApiState):
         self.command_detected = False
         self.listen_thread = None
         self.language = "pl-PL"
-        self.phrase_time_limit = None
+        self.phrase_time_limit = 5
 
         try:
             self.recognizer = Recognizer()
