@@ -21,14 +21,14 @@ class UiThread(Thread):
         self.api_window = ApiWindow()
         Logger.logging.debug("Command recognition class state: {0}".format(
             GET_MESSAGE(self.api_window.api_info)))
+        if not self.api_window.api_runs:
+            self.close_thread = True
         self.MessagesHandler.send_message(self.api_window.api_info)
 
     def network_connection(self):
-        if Network.enabled():
+        if Network.enabled() and not self.close_thread:
             self.api_window.init_network_dependency()
             self.api_window.display_wifi(enable_wifi=True)
-        else:
-            self.close_thread = False
         self.MessagesHandler.send_message(Network.get_status())
 
     def run_api_window(self):
