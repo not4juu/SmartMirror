@@ -72,6 +72,7 @@ class ApiWindow(ApiState):
 
         self.news = None
         self.news_displayed = False
+        Logger.logging.debug("Initialization of Application Window class")
 
     def camera_connection(self):
         Logger.logging.debug("Find camera connection")
@@ -106,7 +107,7 @@ class ApiWindow(ApiState):
         self.api_info = GLO_MSG['API_USER_QUIT']
 
     def full_screen(self, event=None):
-        Logger.logging.debug("ApiWindow full screen  has been enabled"
+        Logger.logging.debug("ApiWindow full screen has been enabled"
                              if self.api_full_screen else "ApiWindow full screen has been disabled")
         self.api_full_screen = not self.api_full_screen
         self.tk.attributes("-fullscreen", self.api_full_screen)
