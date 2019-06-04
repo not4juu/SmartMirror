@@ -1,11 +1,5 @@
 import cv2
 import os
-import smartmirror.Logger as Logger
-
-from tkinter import filedialog
-from tkinter import *
-
-path = os.path.dirname(os.path.realpath(__file__))
 
 
 class FaceSampleCollector:
@@ -20,20 +14,18 @@ class FaceSampleCollector:
             if not self.camera.isOpened():
                 raise NameError
         except cv2.error as exception:
-            Logger.logging.critical("OpenCV camera hardware problem: {0}".format(exception))
-            return None
+            print("OpenCV camera hardware problem: {0}".format(exception))
+            exit(1)
         except Exception as exception:
-            Logger.logging.critical("Camera hardware is not connected: {0}".format(exception))
-            return None
+            print("Camera hardware is not connected: {0}".format(exception))
+            exit(1)
 
         try:
-            w = path + os.path.normpath('/../cascades/haarcascade_frontal_face_default.xml')
-            print(w)
             self.face_cascade = cv2.CascadeClassifier('../cascades/haarcascade_frontal_face_default.xml')
             self.eye_cascade = cv2.CascadeClassifier('../cascades/haarcascade_eye.xml')
             self.smile_cascade = cv2.CascadeClassifier('../cascades/haarcascade_smile.xml')
         except Exception as exception:
-            Logger.logging.critical("Camera hardware is not connected: {0}".format(exception))
+            print("Camera hardware is not connected: {0}".format(exception))
             return None
 
     def __del__(self):
@@ -80,15 +72,15 @@ class FaceSampleCollector:
         if number in range(0, self.samples_number):
             detection = self.face_cascade.detectMultiScale(self.gray, scaleFactor=1.2, minNeighbors=5, minSize=(20, 20))
             self.display_method_text('Please look at camera')
-            Logger.logging.debug("get face_detection sample {0}".format(number))
+            print("get face_detection sample {0}".format(number))
         if number in range(self.samples_number, self.samples_number * 2):
             detection = self.eye_cascade.detectMultiScale(self.gray, scaleFactor=1.5, minNeighbors=10, minSize=(5, 5))
             self.display_method_text('Please look at camera')
-            Logger.logging.debug("get eye_detection sample {0}".format(number))
+            print("get eye_detection sample {0}".format(number))
         if number in range(self.samples_number * 2, self.samples_number * self.cascades_number):
             detection = self.smile_cascade.detectMultiScale(self.gray, scaleFactor=1.5, minNeighbors=15, minSize=(25, 25))
             self.display_method_text('Please smile :)')
-            Logger.logging.debug("get smile_detection sample {0}".format(number))
+            print("get smile_detection sample {0}".format(number))
 
         return detection
 
@@ -97,14 +89,8 @@ class FaceSampleCollector:
 
 
 if __name__ == "__main__":
-    #root = Tk()
-    #root.filename  = filedialog.asksaveasfilename(initialdir = "/",title = "Select file",filetypes = (("jpeg files","*.jpg"),("all files","*.*")))
-    #print(root.filename )  # test
-
-    Logger.init_logger(False, True)
-    Logger.logging.info(__name__)
-    a = FaceSampleCollector()
-    a.run_sample_collector()
+    collector = FaceSampleCollector()
+    collector.run_sample_collector()
 
 
 
