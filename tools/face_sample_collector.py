@@ -27,9 +27,9 @@ class FaceSampleCollector:
             return None
 
         try:
-            w = path + os.path.normpath('/../cascades/haarcascade_frontalface_default.xml')
+            w = path + os.path.normpath('/../cascades/haarcascade_frontal_face_default.xml')
             print(w)
-            self.face_cascade = cv2.CascadeClassifier('../cascades/haarcascade_frontalface_default.xml')
+            self.face_cascade = cv2.CascadeClassifier('../cascades/haarcascade_frontal_face_default.xml')
             self.eye_cascade = cv2.CascadeClassifier('../cascades/haarcascade_eye.xml')
             self.smile_cascade = cv2.CascadeClassifier('../cascades/haarcascade_smile.xml')
         except Exception as exception:
@@ -94,10 +94,6 @@ class FaceSampleCollector:
 
     def display_method_text(self, text):
         cv2.putText(self.frame, text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255, 255, 255), 2, cv2.LINE_AA)
-
-    def save_to_file(self):
-        for face in self.faces:
-            cv2.imwrite("dataset/" + str(face_id) + '/' + str(count) + ".jpg", gray[y:y + h, x:x + w])
 
 
 if __name__ == "__main__":
