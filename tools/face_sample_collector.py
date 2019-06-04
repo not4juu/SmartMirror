@@ -1,5 +1,10 @@
 import cv2
 import os
+import sys
+
+PATH = os.path.dirname(os.path.realpath(__file__))
+if sys.platform != 'linux':
+    PATH = PATH.replace("\\", '/')
 
 
 class FaceSampleCollector:
@@ -7,8 +12,11 @@ class FaceSampleCollector:
 
         self.frame = None
         self.gray = None
+        self.face_id = 0
         self.samples_number = 10
         self.cascades_number = 3
+        self.save_folder_name = PATH + '/../dataset'
+
         try:
             self.camera = cv2.VideoCapture(0)
             if not self.camera.isOpened():
@@ -21,9 +29,9 @@ class FaceSampleCollector:
             exit(1)
 
         try:
-            self.face_cascade = cv2.CascadeClassifier('../cascades/haarcascade_frontal_face_default.xml')
-            self.eye_cascade = cv2.CascadeClassifier('../cascades/haarcascade_eye.xml')
-            self.smile_cascade = cv2.CascadeClassifier('../cascades/haarcascade_smile.xml')
+            self.face_cascade = cv2.CascadeClassifier(PATH + '/../cascades/haarcascade_frontal_face_default.xml')
+            self.eye_cascade = cv2.CascadeClassifier(PATH + '/../cascades/haarcascade_eye.xml')
+            self.smile_cascade = cv2.CascadeClassifier(PATH + '/../cascades/haarcascade_smile.xml')
         except Exception as exception:
             print("Camera hardware is not connected: {0}".format(exception))
             return None
@@ -35,7 +43,8 @@ class FaceSampleCollector:
     def run_sample_collector(self):
         self.face_id = input('\n Enter user id end press <enter> ==>  ')
         faced_detected = 0
-        directory = 'dataset/' + str(self.face_id)
+        directory = self.save_folder_name + '/' + str(self.face_id)
+        print("Samples will be save into {0}".format(directory))
         if not os.path.exists(directory):
             os.makedirs(directory)
 
@@ -91,8 +100,3 @@ class FaceSampleCollector:
 if __name__ == "__main__":
     collector = FaceSampleCollector()
     collector.run_sample_collector()
-
-
-
-
-
