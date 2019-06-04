@@ -34,7 +34,7 @@ class FaceSampleCollector:
             self.smile_cascade = cv2.CascadeClassifier(PATH + '/../cascades/haarcascade_smile.xml')
         except Exception as exception:
             print("Camera hardware is not connected: {0}".format(exception))
-            return None
+            exit(1)
 
     def __del__(self):
         self.camera.release()
