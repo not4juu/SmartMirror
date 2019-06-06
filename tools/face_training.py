@@ -27,12 +27,14 @@ def face_recognition_training():
         image = cv2.imread(imagePath)
         rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         boxes = face_recognition.face_locations(rgb, model=model)
-        print('\r {0}'.format(running_console_bar[items % len(running_console_bar)]), end="")
         encodings_data = face_recognition.face_encodings(rgb, boxes)
-        items += 1
+
         for encoding_sample in encodings_data:
             known_encodings.append(encoding_sample)
             known_names.append(name)
+
+        print('\r {0}'.format(running_console_bar[items % len(running_console_bar)]), end="")
+        items += 1
 
     print("Faces encoding data ends, items: {0}".format(items))
     data = {"encodings": known_encodings, "names": known_names}
