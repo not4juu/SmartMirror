@@ -1,3 +1,4 @@
+from argparse import ArgumentParser
 from imutils import paths
 from PIL import Image
 import pickle
@@ -81,5 +82,17 @@ def face_opencv_training():
 
 
 if __name__ == "__main__":
-   #face_recognition_training()
-   face_opencv_training()
+    parser = ArgumentParser(
+        prog="smartmirror face_training",
+        description="Smart Mirror tools to train collected image samples",
+        epilog="more detailed information in README.md file https://github.com/not4juu/SmartMirror"
+    )
+    parser.add_argument("-t", "--training_method", type=str, default="face_recognition",
+                        help="training method to use: face_recognition or face_opencv")
+    parser.add_argument("--version", action="version", version="%(prog)s 1.0.0")
+    args = parser.parse_args()
+
+    if args.training_method == "face_recognition":
+        face_recognition_training()
+    elif args.training_method == "face_opencv":
+        face_opencv_training()

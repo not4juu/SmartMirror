@@ -1,3 +1,4 @@
+from argparse import ArgumentParser
 import cv2
 import os
 import sys
@@ -8,12 +9,12 @@ if sys.platform != 'linux':
 
 
 class FaceSampleCollector:
-    def __init__(self):
+    def __init__(self, sample_number):
 
         self.frame = None
         self.gray = None
         self.face_id = 0
-        self.samples_number = 10
+        self.samples_number = sample_number
         self.cascades_number = 3
         self.save_folder_name = PATH + '/../dataset'
 
@@ -98,5 +99,16 @@ class FaceSampleCollector:
 
 
 if __name__ == "__main__":
-    collector = FaceSampleCollector()
+    parser = ArgumentParser(
+        prog="smartmirror face_sample_collector",
+        description="Smart Mirror tools to collect image samples from user",
+        epilog="more detailed information in README.md file https://github.com/not4juu/SmartMirror"
+    )
+    parser.add_argument("-n", "--samples_number", type=int, default=10,
+                        help="number of samples to collect per one method, \
+                        three methods are available so final number of samples is multiplied by three")
+    parser.add_argument("--version", action="version", version="%(prog)s 1.0.0")
+    args = parser.parse_args()
+
+    collector = FaceSampleCollector(sample_number=args.samples_number)
     collector.run_sample_collector()
