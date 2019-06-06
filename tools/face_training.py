@@ -22,9 +22,9 @@ def face_recognition_training():
     items = 0
     model = 'hog'  # available also 'cnn' https://face-recognition.readthedocs.io/en/latest/face_recognition.html
     print("Starts face recognition training with model: {0}".format(model))
-    for (i, imagePath) in enumerate(image_paths):
-        name = imagePath.split(os.path.sep)[-2]
-        image = cv2.imread(imagePath)
+    for (i, image_path) in enumerate(image_paths):
+        name = image_path.split(os.path.sep)[-2]
+        image = cv2.imread(image_path)
         rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         boxes = face_recognition.face_locations(rgb, model=model)
         encodings_data = face_recognition.face_encodings(rgb, boxes)
