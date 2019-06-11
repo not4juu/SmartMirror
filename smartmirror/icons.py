@@ -1,3 +1,10 @@
+import os
+import sys
+
+PATH = os.path.dirname(os.path.realpath(__file__))
+if sys.platform != 'linux':
+    PATH = PATH.replace("\\", '/')
+
 """
     Icons dictionary definition
 
@@ -6,25 +13,25 @@
 
 icons = {
     # Api menu icons
-    "news": "smartmirror/icons/news.png",
-    "camera_disabled": "smartmirror/icons/camera_disabled.png",
-    "camera_enabled": "smartmirror/icons/camera_enabled.png",
-    "microphone_disabled": "smartmirror/icons/microphone_disabled.png",
-    "microphone_enabled": "smartmirror/icons/microphone_enabled.png",
-    "wifi_disabled": "smartmirror/icons/wifi_disabled.png",
-    "wifi_enabled": "smartmirror/icons/wifi_enabled.png",
+    "news": PATH + "/icons/news.png",
+    "camera_disabled": PATH + "/icons/camera_disabled.png",
+    "camera_enabled": PATH + "/icons/camera_enabled.png",
+    "microphone_disabled": PATH + "/icons/microphone_disabled.png",
+    "microphone_enabled": PATH + "/icons/microphone_enabled.png",
+    "wifi_disabled": PATH + "/icons/wifi_disabled.png",
+    "wifi_enabled": PATH + "/icons/wifi_enabled.png",
     # Weather icons
-    "clear-day": "smartmirror/icons/weather/clear_day.png",
-    "clear-night": "smartmirror/icons/weather/clear_night.png",
-    "rain": "smartmirror/icons/weather/rain.png",
-    "snow": "smartmirror/icons/weather/snow.png",
-    "sleet": "smartmirror/icons/weather/sleet.png",
-    "wind": "smartmirror/icons/weather/wind.png",
-    "fog": "smartmirror/icons/weather/fog.png",
-    "cloudy": "smartmirror/icons/weather/cloudy.png",
-    "partly-cloudy-day": "smartmirror/icons/weather/partly_cloudy_day.png",
-    "partly-cloudy-night": "smartmirror/icons/weather/partly_cloudy_night.png",
-    "hail": "smartmirror/icons/weather/hail.png",
-    "thunderstorm": "smartmirror/icons/weather/thunderstorm.png",
-    "tornado": "smartmirror/icons/weather/tornado.png"
+    "clear-day": PATH + "/icons/weather/clear_day.png",
+    "clear-night": PATH + "/icons/weather/clear_night.png",
+    "rain": PATH + "/icons/weather/rain.png",
+    "snow": PATH + "/icons/weather/snow.png",
+    "sleet": PATH + "/icons/weather/sleet.png",
+    "wind": PATH + "/icons/weather/wind.png",
+    "fog": PATH + "/icons/weather/fog.png",
+    "cloudy": PATH + "/icons/weather/cloudy.png",
+    "partly-cloudy-day": PATH + "/icons/weather/partly_cloudy_day.png",
+    "partly-cloudy-night": PATH + "/icons/weather/partly_cloudy_night.png",
+    "hail": PATH + "/icons/weather/hail.png",
+    "thunderstorm": PATH + "/icons/weather/thunderstorm.png",
+    "tornado": PATH + "/icons/weather/tornado.png"
 }
