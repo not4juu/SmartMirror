@@ -30,13 +30,13 @@ class PulseText:
             self.brighten = False
 
         if self.brighten:
-            self.color += 1
+            self.color += 5
         else:
-            self.color -= 1
+            self.color -= 5
         self.canvas.itemconfig(self.text, fill=pulse_color)
 
         if self.run:
-            self.canvas.after(10, self._animation)
+            self.canvas.after(15, self._animation)
 
     def set_text(self, text):
         self.canvas.itemconfig(self.text, text=text)
