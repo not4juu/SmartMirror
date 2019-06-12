@@ -4,6 +4,7 @@ from smartmirror.api_state import ApiState
 from smartmirror.window.clock import Clock
 from smartmirror.window.news import News
 from smartmirror.window.weather import Weather
+from smartmirror.window.user import User
 from smartmirror.window.connections_menu import ConnectionsMenu
 from smartmirror.window.pulse_text import PulseText
 from smartmirror.api_settings import ApiSettings
@@ -24,7 +25,8 @@ class ApiWindow(ApiState):
         self.tk.title("Smart Mirror")
         self.tk.configure(background=ApiSettings.Background)
 
-        self.api_full_screen = False
+        self.api_full_screen = True
+        self.tk.attributes("-fullscreen", self.api_full_screen)
         self.tk.bind("q", self.quit_api)
         self.tk.bind("f", self.full_screen)
 
@@ -46,12 +48,15 @@ class ApiWindow(ApiState):
         self.connections_menu = ConnectionsMenu(self.bottom_frame)
         self.connections_menu.pack(side=RIGHT, anchor=SW, padx=ApiSettings.PaddingX, pady=ApiSettings.PaddingY)
 
-        if self.api_runs:
-            self.display_camera(enable_camera=True)
-
         self.clock = Clock(self.top_frame)
         self.clock_displayed = False
         self.clock_view(display=True)
+
+        self.right_top_corner = Frame(self.top_frame, background=ApiSettings.Background)
+        self.right_top_corner.pack(side=TOP, fill=BOTH, expand=YES)
+
+        self.user_logged = User(self.right_top_corner)
+        self.user_displayed = False
 
         self.pulse_text = PulseText(self.center_frame)
 
@@ -101,7 +106,7 @@ class ApiWindow(ApiState):
     """
     def init_network_dependency(self):
         if self.weather is None:
-            self.weather = Weather(self.top_frame)
+            self.weather = Weather(self.right_top_corner)
             self.weather_view(display=True)
 
         if self.news is None:
@@ -137,9 +142,16 @@ class ApiWindow(ApiState):
 
     def weather_view(self, display):
         if self.weather_displayed != display:
-            self.weather.pack(side=RIGHT, anchor=NE, padx=ApiSettings.PaddingX, pady=ApiSettings.PaddingY) \
+            self.weather.pack(side=TOP, anchor=NE, padx=ApiSettings.PaddingX, pady=ApiSettings.PaddingY) \
                 if display else self.weather.pack_forget()
             self.weather_displayed = not self.weather_displayed
+
+    def user_view(self, name, display):
+        if self.user_displayed != display:
+            self.user_logged.set_user_name(name)
+            self.user_logged.pack(side=TOP, anchor=NE, padx=ApiSettings.PaddingX, pady=ApiSettings.PaddingY) \
+                if display else self.user_logged.pack_forget()
+            self.user_displayed = not self.user_displayed
 
 
 if __name__ == "__main__":

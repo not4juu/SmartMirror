@@ -19,6 +19,7 @@ class UiThread(Thread):
         self.close_thread = False
         self.api_window = None
         self.authorization_complete = False
+        self.user_name = ""
         self.camera = None
         Logger.logging.debug("Initialization of User Interface Thread class")
 
@@ -37,8 +38,9 @@ class UiThread(Thread):
             self.api_window.display_camera(enable_camera=False)
 
     def authorization_callback(self, name):
-        Logger.logging.debug("User authorized as: {0}".format(name))
+        self.user_name = name
         self.authorization_complete = True
+        Logger.logging.debug("User authorized as: {0}".format(self.user_name))
 
     """
         Authorization functions
@@ -46,7 +48,7 @@ class UiThread(Thread):
     def start_authorization(self, authorization_callback):
         self.api_window.start_pulse_text("Authorization")
         self.auth = Authorization(self.camera.get_camera(), authorization_callback)
-        self.auth.run(method='opencv_face_recognition', debug=True)
+        self.auth.run(method='opencv_face_recognition', debug=False)
         #self.auth.run(method='dlib_face_recognition', debug=True)
         Logger.logging.debug("Api Window start authorization process")
 
@@ -54,6 +56,7 @@ class UiThread(Thread):
         self.auth.stop()
         self.api_window.stop_pulse_text()
         Logger.logging.debug("Api Window stop authorization process")
+        self.api_window.user_view(name=self.user_name, display=True)
 
     def verify_access(self):
         if self.camera.api_runs:

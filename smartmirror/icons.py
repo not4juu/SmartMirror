@@ -14,6 +14,7 @@ if sys.platform != 'linux':
 icons = {
     # Api menu icons
     "news": PATH + "/icons/news.png",
+    "user_logged": PATH + "/icons/user.png",
     "camera_disabled": PATH + "/icons/camera_disabled.png",
     "camera_enabled": PATH + "/icons/camera_enabled.png",
     "microphone_disabled": PATH + "/icons/microphone_disabled.png",
