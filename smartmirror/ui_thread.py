@@ -46,7 +46,7 @@ class UiThread(Thread):
         Authorization functions
     """
     def start_authorization(self, authorization_callback):
-        self.api_window.start_pulse_text("Authorization")
+        self.api_window.start_pulse_text("Autoryzacja")
         self.auth = Authorization(self.camera.get_camera(), authorization_callback)
         self.auth.run(method='opencv_face_recognition', debug=False)
         #self.auth.run(method='dlib_face_recognition', debug=True)
@@ -66,7 +66,7 @@ class UiThread(Thread):
             self.stop_authorization()
         else:
             Logger.logging.error("Authorization process will not start when camera is not connected")
-            self.api_window.start_pulse_text("Authorization \n Required !")
+            self.api_window.start_pulse_text("Wymagana \nautoryzacja")
 
     def network_connection(self):
         if self.authorization_complete:
