@@ -5,6 +5,7 @@ from smartmirror.api_window import ApiWindow
 from smartmirror.network import Network
 from smartmirror.authorization import Authorization
 from smartmirror.camera import Camera
+from smartmirror.speaker import Speaker
 import smartmirror.Logger as Logger
 
 """
@@ -21,10 +22,12 @@ class UiThread(Thread):
         self.authorization_complete = False
         self.user_name = ""
         self.camera = None
+        self.speaker = None
         Logger.logging.debug("Initialization of User Interface Thread class")
 
     def init_window(self):
         self.api_window = ApiWindow()
+        self.speaker = Speaker()
         if not self.api_window.api_runs:
             self.close_thread = True
         self.MessagesHandler.send_message(self.api_window.api_info)
@@ -56,6 +59,7 @@ class UiThread(Thread):
         self.auth.stop()
         self.api_window.stop_pulse_text()
         Logger.logging.debug("Api Window stop authorization process")
+        self.speaker.say("Witaj w inteligentnym lustrze {0}".format(self.user_name))
         self.api_window.user_view(name=self.user_name, display=True)
 
     def verify_access(self):
