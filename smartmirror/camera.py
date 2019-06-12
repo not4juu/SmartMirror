@@ -11,6 +11,10 @@ from smartmirror.api_state import ApiState
 
 
 class Camera(ApiState):
+
+    Enabled = True
+    Disabled = False
+
     def __init__(self):
         super().__init__()
         self.camera = None
@@ -26,15 +30,15 @@ class Camera(ApiState):
         except cv2.error as exception:
             Logger.logging.critical("OpenCV camera hardware problem: {0}".format(exception))
             self.api_info = GLO_MSG['API_CAMERA_CONNECTION_FAILURE']
-            self.api_runs = False
+            self.api_runs = self.Disabled
             return
         except Exception as exception:
             Logger.logging.critical("Camera hardware is not connected: {0}".format(exception))
             self.api_info = GLO_MSG['API_CAMERA_CONNECTION_FAILURE']
-            self.api_runs = False
+            self.api_runs = self.Disabled
             return
         self.api_info = GLO_MSG['API_WINDOW_INITIALIZED']
-        self.api_runs = True
+        self.api_runs = self.Enabled
         return
 
     def get_status(self):
