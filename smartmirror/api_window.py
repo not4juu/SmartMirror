@@ -1,12 +1,11 @@
-import cv2
 from tkinter import *
-from PIL import Image, ImageTk
 from smartmirror.glo_messages import GLO_MSG
 from smartmirror.api_state import ApiState
 from smartmirror.window.clock import Clock
 from smartmirror.window.news import News
 from smartmirror.window.weather import Weather
 from smartmirror.window.connections_menu import ConnectionsMenu
+from smartmirror.window.pulse_text import PulseText
 from smartmirror.api_settings import ApiSettings
 import smartmirror.Logger as Logger
 """
@@ -25,16 +24,9 @@ class ApiWindow(ApiState):
         self.tk.title("Smart Mirror")
         self.tk.configure(background=ApiSettings.Background)
 
+        self.api_full_screen = False
         self.tk.bind("q", self.quit_api)
         self.tk.bind("f", self.full_screen)
-        self.tk.bind("a", self.camera_capture)  # debug purpose
-
-        """
-            Initialization of camera connections
-        """
-        self.camera = None
-        self.api_runs = self.camera_connection()
-        self.api_full_screen = False
 
         """
             Initialization of frames layout
@@ -61,35 +53,17 @@ class ApiWindow(ApiState):
         self.clock_displayed = False
         self.clock_view(display=True)
 
-        self.camera_frame = Frame(self.center_frame, background=ApiSettings.Background,
-                                  width=self.camera.get(cv2.CAP_PROP_FRAME_WIDTH),
-                                  heigh=self.camera.get(cv2.CAP_PROP_FRAME_HEIGHT))
-        self.camera_frame.pack(side=TOP, expand=YES)
-        self.camera_label = Label(self.camera_frame, borderwidth=0)
+        self.pulse_text = PulseText(self.center_frame)
 
         self.weather = None
         self.weather_displayed = False
 
         self.news = None
         self.news_displayed = False
-        Logger.logging.debug("Initialization of Application Window class")
 
-    def camera_connection(self):
-        Logger.logging.debug("Find camera connection")
-        try:
-            self.camera = cv2.VideoCapture(0)
-            if not self.camera.isOpened():
-                raise NameError
-        except cv2.error as exception:
-            Logger.logging.critical("OpenCV camera hardware problem: {0}".format(exception))
-            self.api_info = GLO_MSG['API_CAMERA_CONNECTION_FAILURE']
-            return False
-        except Exception as exception:
-            Logger.logging.critical("Camera hardware is not connected: {0}".format(exception))
-            self.api_info = GLO_MSG['API_CAMERA_CONNECTION_FAILURE']
-            return False
         self.api_info = GLO_MSG['API_WINDOW_INITIALIZED']
-        return True
+        self.api_runs = True
+        Logger.logging.debug("Initialization of Application Window class")
 
     """
         Tkinter refresh function
@@ -112,18 +86,15 @@ class ApiWindow(ApiState):
         self.api_full_screen = not self.api_full_screen
         self.tk.attributes("-fullscreen", self.api_full_screen)
 
-    def camera_capture(self, event=None):
-        Logger.logging.debug("Capture camera image starts")
-        self.camera_label.grid(row=0, column=0)
-        response, frame = self.camera.read()
-        if response:
-            cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            img = Image.fromarray(cv2image)
-            imgtk = ImageTk.PhotoImage(image=img)
-            self.camera_label.imgtk = imgtk
-            self.camera_label.configure(image=imgtk)
-            Logger.logging.debug("Capture camera image ends successfully width:{0} height:{1}".format(
-                self.camera.get(cv2.CAP_PROP_FRAME_WIDTH), self.camera.get(cv2.CAP_PROP_FRAME_HEIGHT)))
+    """
+        Pulse text functions
+    """
+    def start_pulse_text(self, text):
+        self.pulse_text.set_text(text)
+        self.pulse_text.start_animation()
+
+    def stop_pulse_text(self):
+        self.pulse_text.stop_animation()
 
     """
         Initialization of classes with network dependency
