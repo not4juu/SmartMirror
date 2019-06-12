@@ -14,6 +14,7 @@ GLO_MSG = {
     'HIDE_NEWS': 12,
     'DISPLAY_CLOCK': 13,
     'HIDE_CLOCK': 14,
+    'LOGOUT': 15,
 }
 
 

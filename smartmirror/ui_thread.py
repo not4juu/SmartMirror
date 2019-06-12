@@ -62,12 +62,13 @@ class UiThread(Thread):
         self.speaker.say("Witaj w inteligentnym lustrze {0}".format(self.user_name))
         self.api_window.user_view(name=self.user_name, display=True)
 
-    def verify_access(self):
+    def run_authorization(self):
         if self.camera.api_runs:
             self.start_authorization(self.authorization_callback)
             while not self.authorization_complete:
                 self.run_api_window()
             self.stop_authorization()
+            self.network_connection()
         else:
             Logger.logging.error("Authorization process will not start when camera is not connected")
             self.api_window.start_pulse_text("Wymagana \nautoryzacja")
@@ -77,6 +78,10 @@ class UiThread(Thread):
             if Network.enabled():
                 self.api_window.init_network_dependency()
                 self.api_window.display_wifi(enable_wifi=True)
+                self.api_window.weather_view(display=True)
+                self.api_window.news_view(display=True)
+            else:
+                self.api_window.display_wifi(enable_wifi=False)
             self.MessagesHandler.send_message(Network.get_status())
 
     def run_api_window(self):
@@ -98,6 +103,7 @@ class UiThread(Thread):
             GLO_MSG['HIDE_NEWS']: self.handler_hide_news,
             GLO_MSG['DISPLAY_CLOCK']: self.handler_display_clock,
             GLO_MSG['HIDE_CLOCK']: self.handler_hide_clock,
+            GLO_MSG['LOGOUT']: self.handler_logout,
         }
         message_id = self.MessagesHandler.get_message()
         if message_id is None:
@@ -131,12 +137,18 @@ class UiThread(Thread):
     def handler_hide_clock(self):
         self.api_window.clock_view(display=False)
 
+    def handler_logout(self):
+        self.api_window.user_view(name="", display=False)
+        self.api_window.weather_view(display=False)
+        self.api_window.news_view(display=False)
+        self.authorization_complete = False
+        self.run_authorization()
+
     def run(self):
         Logger.logging.debug("User_Interface thread runs")
         self.init_window()
         self.init_camera()
-        self.verify_access()
-        self.network_connection()
+        self.run_authorization()
         while not self.close_thread:
             self.run_api_window()
             self.run_messages_handler()

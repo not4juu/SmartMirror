@@ -107,11 +107,9 @@ class ApiWindow(ApiState):
     def init_network_dependency(self):
         if self.weather is None:
             self.weather = Weather(self.right_top_corner)
-            self.weather_view(display=True)
 
         if self.news is None:
             self.news = News(self.bottom_frame)
-            self.news_view(display=True)
 
     """
         Api icons menu bar enabler
