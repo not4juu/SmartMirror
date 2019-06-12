@@ -1,11 +1,14 @@
 certifi==2019.3.9
 chardet==3.0.4
+face-recognition==1.2.3
+face-recognition-models==0.3.0
 feedparser==5.2.1
 idna==2.8
 numpy==1.16.3
 opencv-python==4.1.0.25
 Pillow==6.0.0
 PyAudio==0.2.11
+pyttsx3==2.71
 requests==2.22.0
 SpeechRecognition==3.8.1
 urllib3==1.25.3
