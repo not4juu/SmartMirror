@@ -2,7 +2,7 @@ import unittest
 from smartmirror.camera import Camera
 
 
-class TestApiState(unittest.TestCase):
+class TestCamera(unittest.TestCase):
 
     def test_camera_state(self):
         obj = Camera()
