@@ -1,5 +1,7 @@
 # Table of Contents
 1. [Smart Mirror](#smart-mirror)
+2. [Authors](#author)
+3. [Api License](#license)
 
 # Smart Mirror
 
@@ -73,16 +75,12 @@ Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c6
 
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
-## Author
+# Author
 
 * **Sebastian Kałużny** --- [not4juu](https://github.com/not4juu/)
 
-## License
+# License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
-## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
