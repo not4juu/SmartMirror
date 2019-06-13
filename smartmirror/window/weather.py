@@ -42,8 +42,8 @@ class Weather(Frame):
         self.location_label.pack(side=TOP, anchor=E)
 
         if not self.weather_api_token:
-            Logger.logging.warning("Please define api token for https://darksky.net/dev "
-                                   "weather data will not be available")
+            Logger.logging.error("Please define api token for https://darksky.net/dev "
+                                 "weather data will not be available")
             return None
 
         Logger.logging.debug("Initialization of Weather class")
