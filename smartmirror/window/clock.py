@@ -1,7 +1,7 @@
+import locale
 from contextlib import contextmanager
 from tkinter import *
 from threading import Lock
-import locale
 from time import strftime
 from smartmirror.api_settings import ApiSettings
 import smartmirror.Logger as Logger

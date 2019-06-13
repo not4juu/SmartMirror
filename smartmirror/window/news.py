@@ -1,5 +1,5 @@
-from tkinter import *
 import feedparser
+from tkinter import *
 from smartmirror.api_settings import ApiSettings
 from smartmirror.window.news_headline import NewsHeadline
 import smartmirror.Logger as Logger
