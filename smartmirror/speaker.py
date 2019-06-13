@@ -11,15 +11,15 @@ class Speaker:
             voices = self.engine_speak.getProperty('voices')
             self.engine_speak.setProperty('voice', voices[0].id)
         except Exception as err:
-            Logger.logging.error("Speak initialization : {0}".format(err))
+            Logger.logging.error("Speaker initialization error : {0}".format(err))
 
     def say(self, text):
         try:
-            Logger.logging.error("Speak say : {0}".format(text))
+            Logger.logging.info("Speak say : {0}".format(text))
             self.engine_speak.say(text)
             self.engine_speak.runAndWait()
         except Exception as err:
-            Logger.logging.error("Speak say : {0}".format(err))
+            Logger.logging.error("Speaker error : {0}".format(err))
 
 
 if __name__ == "__main__":
