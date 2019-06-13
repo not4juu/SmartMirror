@@ -20,7 +20,7 @@ class UcThread(Thread):
         Logger.logging.debug("Initialization of User Command Thread class")
 
     def wait_for_ui_initialization(self):
-        Logger.logging.debug("Wait for init network and window")
+        Logger.logging.info("Wait for init network and window")
 
         def ui_initialized():
             return self.window_enabled and self.network_enabled
@@ -39,7 +39,7 @@ class UcThread(Thread):
         else:
             self.close_thread = True
 
-        Logger.logging.debug("Command recognition class state: {0}".format(
+        Logger.logging.info("Command recognition class state: {0}".format(
             GET_MESSAGE(self.command_recognition.api_info)))
         self.MessagesHandler.send_message(self.command_recognition.api_info)
 
@@ -72,11 +72,11 @@ class UcThread(Thread):
         self.close_thread = True
 
     def run(self):
-        Logger.logging.debug("User_Command thread runs")
+        Logger.logging.info("User_Command thread runs")
         self.wait_for_ui_initialization()
         while not self.close_thread:
             self.run_messages_handler()
-        Logger.logging.debug("User_Command thread ends")
+        Logger.logging.info("User_Command thread ends")
 
 
 if __name__ == "__main__":

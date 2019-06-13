@@ -43,7 +43,7 @@ class UiThread(Thread):
     def authorization_callback(self, name):
         self.user_name = name
         self.authorization_complete = True
-        Logger.logging.debug("User authorized as: {0}".format(self.user_name))
+        Logger.logging.info("User authorized as: {0}".format(self.user_name))
 
     """
         Authorization functions
@@ -145,14 +145,14 @@ class UiThread(Thread):
         self.run_authorization()
 
     def run(self):
-        Logger.logging.debug("User_Interface thread runs")
+        Logger.logging.info("User_Interface thread runs")
         self.init_window()
         self.init_camera()
         self.run_authorization()
         while not self.close_thread:
             self.run_api_window()
             self.run_messages_handler()
-        Logger.logging.debug("User_Interface thread ends")
+        Logger.logging.info("User_Interface thread ends")
 
 
 if __name__ == "__main__":
