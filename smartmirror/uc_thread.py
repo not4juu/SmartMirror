@@ -14,9 +14,11 @@ class UcThread(Thread):
         Thread.__init__(self, name="UC_Thread")
         self.MessagesHandler = messages_handler
         self.close_thread = False
+
+        self.command_recognition = None
+
         self.network_enabled = False
         self.window_enabled = False
-        self.command_recognition = None
         Logger.logging.debug("Initialization of User Command Thread class")
 
     def wait_for_ui_initialization(self):
