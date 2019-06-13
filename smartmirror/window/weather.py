@@ -5,7 +5,7 @@ from PIL import Image, ImageTk
 from smartmirror.api_settings import ApiSettings
 from smartmirror.network import Network
 from smartmirror.icons import icons
-import smartmirror.Logger as Logger
+from smartmirror.Logger import Logger
 """
     Weather Class
     
@@ -42,11 +42,11 @@ class Weather(Frame):
         self.location_label.pack(side=TOP, anchor=E)
 
         if not self.weather_api_token:
-            Logger.logging.error("Please define api token for https://darksky.net/dev "
-                                 "weather data will not be available")
+            Logger.error("Please define api token for https://darksky.net/dev "
+                         "weather data will not be available")
             return None
 
-        Logger.logging.debug("Initialization of Weather class")
+        Logger.debug("Initialization of Weather class")
         self.get_weather()
 
     def get_weather(self):
@@ -64,10 +64,10 @@ class Weather(Frame):
                 self.weather_api_token, latitude, longitude, self.weather_lang, self.weather_unit)
             response = requests.get(weather_req_url)
             weather_info = json.loads(response.text)
-            Logger.logging.debug("request: " + str(weather_req_url) + " response: " + str(response)
+            Logger.debug("request: " + str(weather_req_url) + " response: " + str(response)
                                  + " json: " + str(weather_info))
         except Exception as err:
-            Logger.logging.critical("Exception: {0}".format(err))
+            Logger.critical("Exception: {0}".format(err))
             return None
 
         if self.weather_info != weather_info:
@@ -98,7 +98,7 @@ class Weather(Frame):
             self.temperature_label.config(text=temperature)
             self.location_label.config(text=location)
 
-        Logger.logging.info("get_weather")
+        Logger.info("get_weather")
         # updates every hour
         self.after(60 * 60 * 1000, self.get_weather)
 

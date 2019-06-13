@@ -2,7 +2,7 @@ import feedparser
 from tkinter import *
 from smartmirror.api_settings import ApiSettings
 from smartmirror.window.news_headline import NewsHeadline
-import smartmirror.Logger as Logger
+from smartmirror.Logger import Logger
 """
     News Class
 """
@@ -28,7 +28,7 @@ class News(Frame):
         for headline in self.headlines_label_list:
             headline.pack(side=TOP, anchor=W)
 
-        Logger.logging.debug("Initialization of News class")
+        Logger.debug("Initialization of News class")
         self.get_headlines()
         self.refresh_headlines()
 
@@ -45,9 +45,9 @@ class News(Frame):
     def get_headlines(self):
         try:
             self.news_list = feedparser.parse(self.news_url)
-            Logger.logging.info("Get number of news: {0} from: {1}".format(len(self.news_list), self.news_url))
+            Logger.info("Get number of news: {0} from: {1}".format(len(self.news_list), self.news_url))
         except Exception as err:
-            Logger.logging.critical("News exception: {0}".format(err))
+            Logger.critical("News exception: {0}".format(err))
         # updates every hour
         self.after(60 * 60 * 1000, self.get_headlines)
 

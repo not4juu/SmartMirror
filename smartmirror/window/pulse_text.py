@@ -1,6 +1,6 @@
 from tkinter import *
 from smartmirror.api_settings import ApiSettings
-import smartmirror.Logger as Logger
+from smartmirror.Logger import Logger
 """
     PulseText - generates pulse text animation based on Canvas utilities
 """
@@ -18,7 +18,7 @@ class PulseText:
         self.color = 0
         self.brighten = True
 
-        Logger.logging.debug("Initialization of PulseText class")
+        Logger.debug("Initialization of PulseText class")
 
     def _animation(self):
         pulse_color = "#{:02x}{:02x}{:02x}".format(self.color, self.color, self.color)
@@ -40,18 +40,18 @@ class PulseText:
 
     def set_text(self, text):
         self.canvas.itemconfig(self.text, text=text)
-        Logger.logging.debug("Set pulse text animation: {0}".format(text))
+        Logger.debug("Set pulse text animation: {0}".format(text))
 
     def start_animation(self):
         self.canvas.pack()
         self.run = True
         self._animation()
-        Logger.logging.debug("Start pulse text animation")
+        Logger.debug("Start pulse text animation")
 
     def stop_animation(self):
         self.run = False
         self.canvas.pack_forget()
-        Logger.logging.debug("Stop pulse text animation")
+        Logger.debug("Stop pulse text animation")
 
 
 if __name__ == "__main__":

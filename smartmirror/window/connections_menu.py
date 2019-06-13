@@ -2,7 +2,7 @@ from tkinter import *
 from PIL import Image, ImageTk
 from smartmirror.api_settings import ApiSettings
 from smartmirror.icons import icons
-import smartmirror.Logger as Logger
+from smartmirror.Logger import Logger
 """
     Connections Class
 """
@@ -56,22 +56,22 @@ class ConnectionsMenu(Frame):
                                       bg=ApiSettings.Background, image=self.microphone_disable_icon)
         self.microphone_label.pack(side=RIGHT, anchor=CENTER)
 
-        Logger.logging.debug("Initialization of Connections class")
+        Logger.debug("Initialization of Connections class")
 
     def wifi(self, enable):
         self.wifi_label.configure(image=self.wifi_enable_icon) if enable else \
             self.wifi_label.configure(image=self.wifi_disable_icon)
-        Logger.logging.debug("Wifi has been enabled" if enable else "Wifi has been disabled")
+        Logger.debug("Wifi has been enabled" if enable else "Wifi has been disabled")
 
     def camera(self, enable):
         self.camera_label.configure(image=self.camera_enable_icon) if enable else \
             self.camera_label.configure(image=self.camera_disable_icon)
-        Logger.logging.debug("Camera has been enabled" if enable else "Camera has been disabled")
+        Logger.debug("Camera has been enabled" if enable else "Camera has been disabled")
 
     def microphone(self, enable):
         self.microphone_label.configure(image=self.microphone_enable_icon) if enable else \
             self.microphone_label.configure(image=self.microphone_disable_icon)
-        Logger.logging.debug("Microphone has been enabled" if enable else "Microphone has been disabled")
+        Logger.debug("Microphone has been enabled" if enable else "Microphone has been disabled")
 
 
 if __name__ == "__main__":

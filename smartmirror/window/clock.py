@@ -4,7 +4,7 @@ from tkinter import *
 from threading import Lock
 from time import strftime
 from smartmirror.api_settings import ApiSettings
-import smartmirror.Logger as Logger
+from smartmirror.Logger import Logger
 
 CLOCK_LOCKER = Lock()
 @contextmanager
@@ -38,7 +38,7 @@ class Clock(Frame):
                                 fg=ApiSettings.Foreground, bg=ApiSettings.Background)
         self.date_label.pack(side=TOP, anchor=W)
 
-        Logger.logging.debug("Initialization of Clock class")
+        Logger.debug("Initialization of Clock class")
         self.tick()
 
     def tick(self):

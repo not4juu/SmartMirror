@@ -2,7 +2,7 @@ from tkinter import *
 from PIL import Image, ImageTk
 from smartmirror.api_settings import ApiSettings
 from smartmirror.icons import icons
-import smartmirror.Logger as Logger
+from smartmirror.Logger import Logger
 """
     News Headline Class
 """
@@ -26,7 +26,7 @@ class NewsHeadline(Frame):
                                          font=(ApiSettings.Font, ApiSettings.SmallTextSize),
                                          fg=ApiSettings.Foreground, bg=ApiSettings.Background)
         self.headline_text_label.pack(side=LEFT, anchor=N)
-        Logger.logging.debug("Initialization of News Headline class")
+        Logger.debug("Initialization of News Headline class")
 
     def update_headline(self, headline_text=""):
         self.headline_text = headline_text

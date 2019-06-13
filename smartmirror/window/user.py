@@ -2,7 +2,7 @@ from tkinter import *
 from PIL import Image, ImageTk
 from smartmirror.api_settings import ApiSettings
 from smartmirror.icons import icons
-import smartmirror.Logger as Logger
+from smartmirror.Logger import Logger
 
 
 class User(Frame):
@@ -22,12 +22,12 @@ class User(Frame):
                                      fg=ApiSettings.Foreground, bg=ApiSettings.Background)
         self.user_name_label.pack(side=LEFT, anchor=N)
 
-        Logger.logging.debug("Initialization of User class")
+        Logger.debug("Initialization of User class")
 
     def set_user_name(self, name):
         self.user_name = str(name)
         self.user_name_label.config(text=self.user_name)
-        Logger.logging.debug("set user name : {0}".format(self.user_name))
+        Logger.debug("set user name : {0}".format(self.user_name))
 
 
 if __name__ == "__main__":
