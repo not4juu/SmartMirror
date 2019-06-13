@@ -1,12 +1,9 @@
+# Table of Contents
+1. [Smart Mirror](#smart-mirror)
+
 # Smart Mirror
 
-Smart Mirror application has been created for Raspberry Pi 3 deployment using biometric aspects.
-
-# Table of Contents
-1. [Smart Mirror Info](#moler)
-2. [Author](##author)
-3. [License](##license)
-
+Smart Mirror application has been created for Raspberry Pi 3 deployment using biometric aspects to communicate and control running app.
 
 ## Getting Started
 
