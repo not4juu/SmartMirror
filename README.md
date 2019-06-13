@@ -1,5 +1,6 @@
 # Table of Contents
 1. [Smart Mirror](#smart-mirror)
+   1. [Getting Started](#getting-started)
 2. [Authors](#author)
 3. [Api License](#license)
 
@@ -9,6 +10,9 @@ Smart Mirror application has been created for Raspberry Pi 3 deployment using bi
 
 ## Getting Started
 
+Application fallows above functionalities:
+* 
+  
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
 ### Prerequisites
