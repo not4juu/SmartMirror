@@ -32,7 +32,7 @@ class Authorization:
         self.font = cv2.FONT_HERSHEY_SIMPLEX
 
         self.detected = {}
-        self.samples_confidence = 30
+        self.samples_confidence = 20
 
         self.min_width = 0.1 * self.camera.get(3)
         self.min_height = 0.1 * self.camera.get(4)
