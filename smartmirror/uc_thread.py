@@ -19,7 +19,7 @@ class UcThread(Thread):
         self.command_recognition = None
         Logger.logging.debug("Initialization of User Command Thread class")
 
-    def wait_for_ui_init(self):
+    def wait_for_ui_initialization(self):
         Logger.logging.debug("Wait for init network and window")
 
         def ui_initialized():
@@ -33,7 +33,7 @@ class UcThread(Thread):
 
     def init_command_recognition(self):
         Logger.logging.debug("Init command recognition")
-        self.command_recognition = CommandsRecognition()
+        self.command_recognition = CommandsRecognition(self.command_detection_callback)
         if self.command_recognition.api_runs:
             self.command_recognition.background_listen()
         else:
@@ -43,10 +43,8 @@ class UcThread(Thread):
             GET_MESSAGE(self.command_recognition.api_info)))
         self.MessagesHandler.send_message(self.command_recognition.api_info)
 
-    def run_command_detection(self):
-        if self.command_recognition.is_command_detected():
-            self.MessagesHandler.send_message(self.command_recognition.get_command())
-            self.command_recognition.clear()
+    def command_detection_callback(self, detected_command):
+        self.MessagesHandler.send_message(detected_command)
 
     def run_messages_handler(self):
         handler = {
@@ -75,9 +73,8 @@ class UcThread(Thread):
 
     def run(self):
         Logger.logging.debug("User_Command thread runs")
-        self.wait_for_ui_init()
+        self.wait_for_ui_initialization()
         while not self.close_thread:
-            self.run_command_detection()
             self.run_messages_handler()
         Logger.logging.debug("User_Command thread ends")
 

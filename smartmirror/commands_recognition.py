@@ -11,13 +11,12 @@ import smartmirror.Logger as Logger
 
 
 class CommandsRecognition(ApiState):
-    def __init__(self):
+    def __init__(self, callback):
         super().__init__()
-        self.command = None
-        self.command_detected = False
+        self.callback_command_detected = callback
         self.listen_thread = None
         self.language = "pl-PL"
-        self.phrase_time_limit = 5
+        self.phrase_time_limit = 3
 
         try:
             self.recognizer = Recognizer()
@@ -42,22 +41,11 @@ class CommandsRecognition(ApiState):
         Logger.logging.debug("Initialization of CommandsRecognition class")
         self.api_info = GLO_MSG['MICROPHONE_INITIALIZED']
 
-    def get_command(self):
-        return self.command
-
-    def is_command_detected(self):
-        return self.command_detected
-
-    def clear(self):
-        Logger.logging.debug("Clear commands")
-        self.command = None
-        self.command_detected = False
-
     def validate_command(self, command):
         if command.lower() in GLO_CMD.values():
-            self.command = GET_COMMAND(command.lower())
-            self.command_detected = True
+            detected_command_id = GET_COMMAND(command.lower())
             Logger.logging.info("GLO_CMD command available -> {0}".format(command.lower()))
+            self.callback_command_detected(detected_command_id)
         else:
             Logger.logging.info("Detected command: {0}".format(command.lower()))
 
