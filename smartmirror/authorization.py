@@ -24,9 +24,9 @@ if sys.platform != 'linux':
 class Authorization:
     def __init__(self, camera, callback):
         self.camera = camera
-        self.callback = callback
+        self.callback_authorized_user = callback
         self.thread_running = False
-        self.authorization_running = False
+        self.authorization_process_running = False
 
         self.debug = False
         self.font = cv2.FONT_HERSHEY_SIMPLEX
@@ -57,7 +57,7 @@ class Authorization:
         recognizer = cv2.face.LBPHFaceRecognizer_create()  # https://docs.opencv.org/3.4/d4/d48/namespacecv_1_1face.html
         recognizer.read(PATH + '/../trained_data/trainer.yml')
 
-        while self.thread_running and self.authorization_running:
+        while self.thread_running and self.authorization_process_running:
             response, image = self.camera.read()
             gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
@@ -87,7 +87,7 @@ class Authorization:
     def run_dlib_face_recognition(self):
         data = pickle.loads(open(PATH + "/../trained_data/encodings.pickle", "rb").read())
 
-        while self.thread_running and self.authorization_running:
+        while self.thread_running and self.authorization_process_running:
 
             response, image = self.camera.read()
             gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -140,16 +140,17 @@ class Authorization:
         Logger.logging.debug("Authorization confidence {0}".format(self.detected))
         if self.samples_confidence in self.detected.values():
             Logger.logging.debug("Authorization confidence {0}".format(self.samples_confidence))
-            self.authorization_running = False
+            self.authorization_process_running = False
             for name, confidence in self.detected.items():
                 if self.samples_confidence == confidence:
-                    self.callback(name)
+                    self.callback_authorized_user(name)
 
     def run(self, method='opencv_face_recognition', debug=False):
         Logger.logging.debug("Start authorization thread: {0}".format(method))
         self.thread_running = True
-        self.authorization_running = True
+        self.authorization_process_running = True
         self.debug = debug
+
         if method is 'opencv_face_recognition':
             target = self.run_opencv_face_recognition
         if method is 'dlib_face_recognition':
