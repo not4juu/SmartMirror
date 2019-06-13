@@ -51,8 +51,8 @@ class UiThread(Thread):
     def start_authorization(self, authorization_callback):
         self.api_window.start_pulse_text("Autoryzacja")
         self.auth = Authorization(self.camera.get_camera(), authorization_callback)
-        self.auth.run(method='opencv_face_recognition', debug=False)
-        #self.auth.run(method='dlib_face_recognition', debug=True)
+       # self.auth.run(method='opencv_face_recognition', debug=False)
+        self.auth.run(method='dlib_face_recognition', debug=False)
         Logger.logging.debug("Api Window start authorization process")
 
     def stop_authorization(self):
