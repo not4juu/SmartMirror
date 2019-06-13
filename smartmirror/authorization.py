@@ -3,8 +3,8 @@ import os
 import sys
 import pickle
 import face_recognition
-import threading
-import smartmirror.Logger as Logger
+from threading import Thread
+from smartmirror.Logger import Logger
 
 PATH = os.path.dirname(os.path.realpath(__file__))
 if sys.platform != 'linux':
@@ -129,7 +129,7 @@ class Authorization:
                 cv2.waitKey(10)
 
     def add_detected_face(self, name):
-        Logger.logging.debug("Detected {0}".format(name))
+        Logger.debug("Detected {0}".format(name))
         if name in self.detected:
             self.detected[name] += 1
         else:
@@ -137,16 +137,16 @@ class Authorization:
         self.recognition_confidence()
 
     def recognition_confidence(self):
-        Logger.logging.debug("Authorization confidence {0}".format(self.detected))
+        Logger.debug("Authorization confidence {0}".format(self.detected))
         if self.samples_confidence in self.detected.values():
-            Logger.logging.debug("Authorization confidence {0}".format(self.samples_confidence))
+            Logger.debug("Authorization confidence {0}".format(self.samples_confidence))
             self.authorization_process_running = False
             for name, confidence in self.detected.items():
                 if self.samples_confidence == confidence:
                     self.callback_authorized_user(name)
 
     def run(self, method='opencv_face_recognition', debug=False):
-        Logger.logging.debug("Start authorization thread: {0}".format(method))
+        Logger.debug("Start authorization thread: {0}".format(method))
         self.thread_running = True
         self.authorization_process_running = True
         self.debug = debug
@@ -156,12 +156,12 @@ class Authorization:
         if method is 'dlib_face_recognition':
             target = self.run_dlib_face_recognition
 
-        listener_thread = threading.Thread(target=target)
+        listener_thread = Thread(target=target)
         listener_thread.daemon = True
         listener_thread.start()
 
     def stop(self):
-        Logger.logging.debug("Stop authorization thread")
+        Logger.debug("Stop authorization thread")
         self.thread_running = False
 
 

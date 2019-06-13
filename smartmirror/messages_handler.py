@@ -1,6 +1,6 @@
 from time import sleep
 from smartmirror.glo_messages import GET_MESSAGE
-import smartmirror.Logger as Logger
+from smartmirror.Logger import Logger
 """
     MessagesHandler class
     - manages program communication based on defined messages,
@@ -13,14 +13,14 @@ class MessagesHandler(object):
     def __init__(self, messages_queue, messages_locker):
         self.__messages_queue = messages_queue
         self.__messages_locker = messages_locker
-        Logger.logging.debug("Initialized a Messages Handler object")
+        Logger.debug("Initialized a Messages Handler object")
     """
         Sends (put) the message into queue and lock the queue until someone will pick up it
     """
     def send_message(self, message_id):
         self.__messages_locker.acquire()
         self.__messages_queue.put(message_id)
-        Logger.logging.debug("Sends : {0}".format(GET_MESSAGE(message_id)))
+        Logger.debug("Sends : {0}".format(GET_MESSAGE(message_id)))
         return None
     """
         Gets message from queue if queue is not empty, release locker for another message which will be adds
@@ -30,7 +30,7 @@ class MessagesHandler(object):
     def get_message(self):
         if not self.__messages_queue.empty():
             message_id = self.__messages_queue.get()
-            Logger.logging.debug("Received : {0}".format(GET_MESSAGE(message_id)))
+            Logger.debug("Received : {0}".format(GET_MESSAGE(message_id)))
             self.__messages_queue.task_done()
             self.__messages_locker.release()
             return message_id
@@ -43,7 +43,7 @@ class MessagesHandler(object):
         It is some protection case - does not let program infinite loop
     """
     def send_message_again(self, message_id):
-        Logger.logging.debug("Message \"{0}\" no reference handler".format(GET_MESSAGE(message_id)))
+        Logger.debug("Message \"{0}\" no reference handler".format(GET_MESSAGE(message_id)))
         self.send_message(message_id)
         sleep(0.05)
         return None

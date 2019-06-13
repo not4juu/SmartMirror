@@ -2,7 +2,7 @@ import socket
 import requests
 import json
 from smartmirror.glo_messages import GLO_MSG
-import smartmirror.Logger as Logger
+from smartmirror.Logger import Logger
 """
     Network Class
 """
@@ -29,19 +29,19 @@ class Network(object):
             socket.setdefaulttimeout(3)
             socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect(("8.8.8.8", 53))
             network_status = GLO_MSG['NETWORK_CONNECTION_SUCCESS']
-            Logger.logging.debug("Internet connection enabled")
+            Logger.debug("Internet connection enabled")
             return True
         except socket.error as socket_error:
             network_status = GLO_MSG['NETWORK_CONNECTION_FAILURE']
-            Logger.logging.critical("Internet connection disabled socket.error : {0}".format(socket_error))
+            Logger.critical("Internet connection disabled socket.error : {0}".format(socket_error))
             return False
         except OSError as ose_error:
             network_status = GLO_MSG['NETWORK_CONNECTION_FAILURE']
-            Logger.logging.critical("Internet connection disabled OSError : {0}".format(ose_error))
+            Logger.critical("Internet connection disabled OSError : {0}".format(ose_error))
             return False
         except Exception as err:
             network_status = GLO_MSG['NETWORK_CONNECTION_FAILURE']
-            Logger.logging.critical("Internet connection disabled exception : {0}".format(err))
+            Logger.critical("Internet connection disabled exception : {0}".format(err))
             return False
 
     @staticmethod
@@ -54,11 +54,11 @@ class Network(object):
             ip_reg_url = "http://jsonip.com/"
             response = requests.get(ip_reg_url)
             ip_json = json.loads(response.text)
-            Logger.logging.debug("request: " + str(ip_reg_url) + " response: " + str(response)
+            Logger.debug("request: " + str(ip_reg_url) + " response: " + str(response)
                                  + " json: " + str(ip_json))
             return ip_json['ip']
         except Exception as err:
-            Logger.logging.critical("Exception: {0}".format(err))
+            Logger.critical("Exception: {0}".format(err))
             return None
 
     @staticmethod
@@ -67,11 +67,11 @@ class Network(object):
             location_req_url = "http://ip-api.com/json/{0}".format(Network.get_ip())
             response = requests.get(location_req_url)
             location_json = json.loads(response.text)
-            Logger.logging.debug("request: " + str(location_req_url) + " response: " + str(response)
+            Logger.debug("request: " + str(location_req_url) + " response: " + str(response)
                                  + " json: " + str(location_json))
             return location_json
         except Exception as err:
-            Logger.logging.critical("Exception: {0}".format(err))
+            Logger.critical("Exception: {0}".format(err))
             return None
 
 

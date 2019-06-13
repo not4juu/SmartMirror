@@ -8,7 +8,7 @@ from smartmirror.window.user import User
 from smartmirror.window.connections_menu import ConnectionsMenu
 from smartmirror.window.pulse_text import PulseText
 from smartmirror.api_settings import ApiSettings
-import smartmirror.Logger as Logger
+from smartmirror.Logger import Logger
 """
     Application Window Class
     
@@ -68,7 +68,7 @@ class ApiWindow(ApiState):
 
         self.api_info = GLO_MSG['API_WINDOW_INITIALIZED']
         self.api_runs = True
-        Logger.logging.debug("Initialization of Application Window class")
+        Logger.debug("Initialization of Application Window class")
 
     """
         Tkinter refresh function
@@ -86,7 +86,7 @@ class ApiWindow(ApiState):
         self.api_info = GLO_MSG['API_USER_QUIT']
 
     def full_screen(self, event=None):
-        Logger.logging.debug("ApiWindow full screen has been enabled"
+        Logger.debug("ApiWindow full screen has been enabled"
                              if self.api_full_screen else "ApiWindow full screen has been disabled")
         self.api_full_screen = not self.api_full_screen
         self.tk.attributes("-fullscreen", self.api_full_screen)

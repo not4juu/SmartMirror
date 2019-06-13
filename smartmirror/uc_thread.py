@@ -2,7 +2,7 @@ from threading import Thread
 from smartmirror.glo_messages import GLO_MSG
 from smartmirror.glo_messages import GET_MESSAGE
 from smartmirror.commands_recognition import CommandsRecognition
-import smartmirror.Logger as Logger
+from smartmirror.Logger import Logger
 """
     User Command Thread
 """
@@ -19,10 +19,10 @@ class UcThread(Thread):
 
         self.network_enabled = False
         self.window_enabled = False
-        Logger.logging.debug("Initialization of User Command Thread class")
+        Logger.debug("Initialization of User Command Thread class")
 
     def wait_for_ui_initialization(self):
-        Logger.logging.info("Wait for init network and window")
+        Logger.info("Waiting for initialization network and window")
 
         def ui_initialized():
             return self.window_enabled and self.network_enabled
@@ -34,14 +34,14 @@ class UcThread(Thread):
             self.init_command_recognition()
 
     def init_command_recognition(self):
-        Logger.logging.debug("Init command recognition")
+        Logger.debug("Initialization of command recognition")
         self.command_recognition = CommandsRecognition(self.command_detection_callback)
         if self.command_recognition.api_runs:
             self.command_recognition.background_listen()
         else:
             self.close_thread = True
 
-        Logger.logging.info("Command recognition class state: {0}".format(
+        Logger.debug("Command recognition class state: {0}".format(
             GET_MESSAGE(self.command_recognition.api_info)))
         self.MessagesHandler.send_message(self.command_recognition.api_info)
 
@@ -61,7 +61,7 @@ class UcThread(Thread):
             return message_id
         call_handler = handler.get(
             message_id, lambda: self.MessagesHandler.send_message_again(message_id))
-        Logger.logging.debug(call_handler.__name__)
+        Logger.debug(call_handler.__name__)
         call_handler()
 
     def handler_network_success(self):
@@ -74,11 +74,11 @@ class UcThread(Thread):
         self.close_thread = True
 
     def run(self):
-        Logger.logging.info("User_Command thread runs")
+        Logger.info("User_Command thread runs")
         self.wait_for_ui_initialization()
         while not self.close_thread:
             self.run_messages_handler()
-        Logger.logging.info("User_Command thread ends")
+        Logger.info("User_Command thread ends")
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 import pyttsx3
-import smartmirror.Logger as Logger
+from smartmirror.Logger import Logger
 
 
 class Speaker:
@@ -10,18 +10,18 @@ class Speaker:
             self.engine_speak.setProperty('volume', 1)
             voices = self.engine_speak.getProperty('voices')
             self.engine_speak.setProperty('voice', voices[0].id)
-            Logger.logging.debug("Speaker Class initialized correctly")
+            Logger.debug("Speaker Class initialized correctly")
 
         except Exception as err:
-            Logger.logging.error("Speaker initialization error : {0}".format(err))
+            Logger.error("Speaker initialization error : {0}".format(err))
 
     def say(self, text):
         try:
-            Logger.logging.info("Speak say : {0}".format(text))
+            Logger.info("Speaker say : {0}".format(text))
             self.engine_speak.say(text)
             self.engine_speak.runAndWait()
         except Exception as err:
-            Logger.logging.error("Speaker error : {0}".format(err))
+            Logger.error("Speaker error : {0}".format(err))
 
 
 if __name__ == "__main__":

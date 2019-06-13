@@ -4,7 +4,7 @@ from queue import Queue
 from smartmirror.messages_handler import MessagesHandler
 from smartmirror.ui_thread import UiThread
 from smartmirror.uc_thread import UcThread
-import smartmirror.Logger as Logger
+from smartmirror.Logger import Logger, init_logger
 
 """
     Init program properties
@@ -23,8 +23,8 @@ def init_properties():
     parser.add_argument('--version', action='version', version='%(prog)s 1.0.0')
     args = parser.parse_args()
 
-    Logger.init_logger(logs_to_file=True, verbose=args.verbose)
-    Logger.logging.debug('Init properties finish successfully')
+    init_logger(logs_to_file=True, verbose=args.verbose)
+    Logger.debug('Initialization of properties finish successfully')
 
 
 """
@@ -45,7 +45,7 @@ def init_program_threads():
     main_uc_thread.start()
 
     message_queue.join()
-    Logger.logging.debug('Threads starts successfully')
+    Logger.debug('Threads starts successfully')
 
 
 """
@@ -60,4 +60,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-    Logger.logging.info(__name__ + " ends")
+    Logger.info(__name__ + " ends")

@@ -2,11 +2,11 @@ from threading import Thread
 from smartmirror.glo_messages import GLO_MSG
 from smartmirror.glo_messages import GET_MESSAGE
 from smartmirror.api_window import ApiWindow
-from smartmirror.network import Network
 from smartmirror.authorization import Authorization
 from smartmirror.camera import Camera
+from smartmirror.network import Network
 from smartmirror.speaker import Speaker
-import smartmirror.Logger as Logger
+from smartmirror.Logger import Logger
 
 """
     User Interface Thread
@@ -26,7 +26,7 @@ class UiThread(Thread):
         self.authorization_complete = False
         self.authorized_user_name = ""
         self.quit_authorization = False
-        Logger.logging.debug("Initialization of User Interface Thread class")
+        Logger.debug("Initialization of User Interface Thread class")
 
     def init_window(self):
         self.api_window = ApiWindow()
@@ -51,7 +51,7 @@ class UiThread(Thread):
     def authorization_callback(self, name):
         self.authorized_user_name = name
         self.authorization_complete = True
-        Logger.logging.info("User authorized as: {0}".format(self.authorized_user_name))
+        Logger.info("User authorized as: {0}".format(self.authorized_user_name))
 
     """
         Authorization functions
@@ -61,12 +61,12 @@ class UiThread(Thread):
         self.auth = Authorization(self.camera.get_camera(), self.authorization_callback)
        # self.auth.run(method='opencv_face_recognition', debug=False)
         self.auth.run(method='dlib_face_recognition', debug=False)
-        Logger.logging.debug("Api Window start authorization process")
+        Logger.debug("Start authorization process")
 
     def stop_authorization(self):
         self.auth.stop()
         self.api_window.stop_pulse_text()
-        Logger.logging.debug("Api Window stop authorization process")
+        Logger.debug("Stop authorization process")
         if self.authorization_complete:
             self.speaker.say("Witaj w inteligentnym lustrze {0}".format(self.authorized_user_name))
             self.api_window.user_view(name=self.authorized_user_name, display=True)
@@ -79,7 +79,7 @@ class UiThread(Thread):
             self.stop_authorization()
             self.network_connection()
         else:
-            Logger.logging.error("Authorization process will not start when camera is not connected")
+            Logger.error("Authorization process will not start when camera is not connected")
             self.api_window.start_pulse_text("Wymagana \nautoryzacja")
 
     def network_connection(self):
@@ -99,7 +99,7 @@ class UiThread(Thread):
         else:
             self.close_thread = True
             self.quit_authorization = True
-            Logger.logging.debug("Close thread : \"{0}\"".format(GET_MESSAGE(self.api_window.api_info)))
+            Logger.debug("Close thread : \"{0}\"".format(GET_MESSAGE(self.api_window.api_info)))
             self.MessagesHandler.send_message(self.api_window.api_info)
 
     def run_messages_handler(self):
@@ -119,7 +119,7 @@ class UiThread(Thread):
             return None
         call_handler = handler.get(
             message_id, lambda: self.MessagesHandler.send_message_again(message_id))
-        Logger.logging.debug(call_handler.__name__)
+        Logger.debug(call_handler.__name__)
         call_handler()
 
     def handler_microphone_failure(self):
@@ -154,14 +154,14 @@ class UiThread(Thread):
         self.run_authorization()
 
     def run(self):
-        Logger.logging.info("User_Interface thread runs")
+        Logger.info("User_Interface thread runs")
         self.init_window()
         self.init_camera()
         self.run_authorization()
         while not self.close_thread:
             self.run_api_window()
             self.run_messages_handler()
-        Logger.logging.info("User_Interface thread ends")
+        Logger.info("User_Interface thread ends")
 
 
 if __name__ == "__main__":
