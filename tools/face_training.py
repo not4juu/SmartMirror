@@ -41,7 +41,7 @@ def face_recognition_training():
 
     print("Faces encoding data ends, items: {0}".format(len(known_names)))
     data = {"encodings": known_encodings, "names": known_names}
-    file = open(PATH + "/../encodings.pickle", "wb")
+    file = open(PATH + "/../trained_data/encodings.pickle", "wb")
     file.write(pickle.dumps(data))
     file.close()
     print("Face recognition training ends successfully")
@@ -77,7 +77,7 @@ def face_opencv_training():
     print("Faces encoding data ends, items: {0}".format(len(known_names)))
     print("\n Training  ... {0}".format(faces_detected))
     recognizer.train(known_encodings, np.array(known_names))
-    recognizer.write(PATH + '/../trainer.yml')
+    recognizer.write(PATH + '/../trained_data/trainer.yml')
     print("Face opencv training ends successfully")
 
 
@@ -91,6 +91,9 @@ if __name__ == "__main__":
                         help="training method to use: face_recognition or face_opencv")
     parser.add_argument("--version", action="version", version="%(prog)s 1.0.0")
     args = parser.parse_args()
+
+    if not os.path.exists(PATH + '/../trained_data/'):
+        os.makedirs(PATH + '/../trained_data/')
 
     if args.training_method == "face_recognition":
         face_recognition_training()

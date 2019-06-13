@@ -55,7 +55,7 @@ class Authorization:
                 tmp += 1
 
         recognizer = cv2.face.LBPHFaceRecognizer_create()  # https://docs.opencv.org/3.4/d4/d48/namespacecv_1_1face.html
-        recognizer.read(PATH + '/../trainer.yml')
+        recognizer.read(PATH + '/../trained_data/trainer.yml')
 
         while self.thread_running and self.authorization_running:
             response, image = self.camera.read()
@@ -85,7 +85,7 @@ class Authorization:
                 cv2.waitKey(10)
 
     def run_dlib_face_recognition(self):
-        data = pickle.loads(open(PATH + "/../encodings.pickle", "rb").read())
+        data = pickle.loads(open(PATH + "/../trained_data/encodings.pickle", "rb").read())
 
         while self.thread_running and self.authorization_running:
 
