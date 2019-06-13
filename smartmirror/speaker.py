@@ -10,6 +10,8 @@ class Speaker:
             self.engine_speak.setProperty('volume', 1)
             voices = self.engine_speak.getProperty('voices')
             self.engine_speak.setProperty('voice', voices[0].id)
+            Logger.logging.debug("Speaker Class initialized correctly")
+
         except Exception as err:
             Logger.logging.error("Speaker initialization error : {0}".format(err))
 
