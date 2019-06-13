@@ -5,6 +5,10 @@ from smartmirror.glo_messages import GLO_MSG
 
 class TestApiState(unittest.TestCase):
 
+    def test_class_object(self):
+        obj = ApiState()
+        self.assertEqual(type(obj), ApiState)
+
     def test_init_api_state(self):
         obj = ApiState()
         self.assertEqual(obj.api_runs, True)
