@@ -1,6 +1,12 @@
 # Smart Mirror
 
-One Paragraph of project description goes here
+Smart Mirror application has been created for Raspberry Pi 3 deployment using biometric aspects.
+
+# Table of Contents
+1. [Smart Mirror Info](#moler)
+2. [Author](##author)
+3. [License](##license)
+
 
 ## Getting Started
 
@@ -70,11 +76,11 @@ Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c6
 
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
-## Author
+##Author
 
-* **Sebastian Kałużny** - *whole implementation* - [not4juu](https://github.com/not4juu/)
+* **Sebastian Kałużny** --- [not4juu](https://github.com/not4juu/)
 
-## License
+##License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
