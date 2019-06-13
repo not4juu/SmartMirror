@@ -18,39 +18,47 @@ class UiThread(Thread):
         Thread.__init__(self, name="UI_Thread")
         self.MessagesHandler = messages_handler
         self.close_thread = False
+
         self.api_window = None
-        self.authorization_complete = False
-        self.user_name = ""
         self.camera = None
         self.speaker = None
+
+        self.authorization_complete = False
+        self.authorized_user_name = ""
+        self.quit_authorization = False
         Logger.logging.debug("Initialization of User Interface Thread class")
 
     def init_window(self):
         self.api_window = ApiWindow()
-        self.speaker = Speaker()
         if not self.api_window.api_runs:
             self.close_thread = True
+
         self.MessagesHandler.send_message(self.api_window.api_info)
+        self.init_speaker()
+
+    def init_speaker(self):
+        self.speaker = Speaker()
 
     def init_camera(self):
         self.camera = Camera()
-        self.MessagesHandler.send_message(self.camera.api_info)
         if self.camera.get_status() is self.camera.Enabled:
             self.api_window.display_camera(enable_camera=True)
         else:
             self.api_window.display_camera(enable_camera=False)
 
+        self.MessagesHandler.send_message(self.camera.api_info)
+
     def authorization_callback(self, name):
-        self.user_name = name
+        self.authorized_user_name = name
         self.authorization_complete = True
-        Logger.logging.info("User authorized as: {0}".format(self.user_name))
+        Logger.logging.info("User authorized as: {0}".format(self.authorized_user_name))
 
     """
         Authorization functions
     """
-    def start_authorization(self, authorization_callback):
+    def start_authorization(self):
         self.api_window.start_pulse_text("Autoryzacja")
-        self.auth = Authorization(self.camera.get_camera(), authorization_callback)
+        self.auth = Authorization(self.camera.get_camera(), self.authorization_callback)
        # self.auth.run(method='opencv_face_recognition', debug=False)
         self.auth.run(method='dlib_face_recognition', debug=False)
         Logger.logging.debug("Api Window start authorization process")
@@ -59,13 +67,14 @@ class UiThread(Thread):
         self.auth.stop()
         self.api_window.stop_pulse_text()
         Logger.logging.debug("Api Window stop authorization process")
-        self.speaker.say("Witaj w inteligentnym lustrze {0}".format(self.user_name))
-        self.api_window.user_view(name=self.user_name, display=True)
+        if self.authorization_complete:
+            self.speaker.say("Witaj w inteligentnym lustrze {0}".format(self.authorized_user_name))
+            self.api_window.user_view(name=self.authorized_user_name, display=True)
 
     def run_authorization(self):
         if self.camera.api_runs:
-            self.start_authorization(self.authorization_callback)
-            while not self.authorization_complete:
+            self.start_authorization()
+            while not (self.authorization_complete or self.quit_authorization):
                 self.run_api_window()
             self.stop_authorization()
             self.network_connection()
@@ -74,7 +83,7 @@ class UiThread(Thread):
             self.api_window.start_pulse_text("Wymagana \nautoryzacja")
 
     def network_connection(self):
-        if self.authorization_complete:
+        if self.authorization_complete and not self.close_thread:
             if Network.enabled():
                 self.api_window.init_network_dependency()
                 self.api_window.display_wifi(enable_wifi=True)
@@ -85,13 +94,13 @@ class UiThread(Thread):
             self.MessagesHandler.send_message(Network.get_status())
 
     def run_api_window(self):
-        if not self.api_window.api_runs:
+        if self.api_window.api_runs:
+            self.api_window.refresh()
+        else:
             self.close_thread = True
-            self.authorization_complete = True
-            Logger.logging.debug("Close thread : \"{0}\"".format(
-                GET_MESSAGE(self.api_window.api_info)))
+            self.quit_authorization = True
+            Logger.logging.debug("Close thread : \"{0}\"".format(GET_MESSAGE(self.api_window.api_info)))
             self.MessagesHandler.send_message(self.api_window.api_info)
-        self.api_window.refresh()
 
     def run_messages_handler(self):
         handler = {
