@@ -1,4 +1,5 @@
-from tkinter import *
+from tkinter import Frame, Label
+from tkinter import RIGHT, CENTER, SE
 from PIL import Image, ImageTk
 from smartmirror.api_settings import ApiSettings
 from smartmirror.icons import icons

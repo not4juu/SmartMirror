@@ -1,6 +1,8 @@
 import requests
 import json
-from tkinter import *
+from tkinter import Frame, Label
+from tkinter import TOP, RIGHT, LEFT, CENTER
+from tkinter import E, NW
 from PIL import Image, ImageTk
 from smartmirror.api_settings import ApiSettings
 from smartmirror.network import Network
@@ -41,13 +43,11 @@ class Weather(Frame):
                                     fg=ApiSettings.Foreground, bg=ApiSettings.Background)
         self.location_label.pack(side=TOP, anchor=E)
 
-        if not self.weather_api_token:
-            Logger.error("Please define api token for https://darksky.net/dev "
-                         "weather data will not be available")
-            return None
-
-        Logger.debug("Initialization of Weather class")
-        self.get_weather()
+        if self.weather_api_token:
+            Logger.debug("Initialization of Weather class")
+            self.get_weather()
+        else:
+            Logger.error("Please define api token for https://darksky.net/dev weather data will not be available")
 
     def get_weather(self):
         location_info = Network.get_location()
@@ -65,7 +65,7 @@ class Weather(Frame):
             response = requests.get(weather_req_url)
             weather_info = json.loads(response.text)
             Logger.debug("request: " + str(weather_req_url) + " response: " + str(response)
-                                 + " json: " + str(weather_info))
+                         + " json: " + str(weather_info))
         except Exception as err:
             Logger.critical("Exception: {0}".format(err))
             return None

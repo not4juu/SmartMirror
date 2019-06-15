@@ -1,6 +1,7 @@
 import locale
 from contextlib import contextmanager
-from tkinter import *
+from tkinter import Frame, Label
+from tkinter import TOP, W
 from threading import Lock
 from time import strftime
 from smartmirror.api_settings import ApiSettings

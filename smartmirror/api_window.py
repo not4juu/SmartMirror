@@ -1,4 +1,7 @@
-from tkinter import *
+from tkinter import Tk, Frame
+from tkinter import LEFT, RIGHT, TOP, BOTH
+from tkinter import YES
+from tkinter import N, NE, SW
 from smartmirror.glo_messages import GLO_MSG
 from smartmirror.api_state import ApiState
 from smartmirror.window.clock import Clock

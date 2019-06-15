@@ -1,4 +1,5 @@
-from tkinter import *
+from tkinter import Tk, Frame, Canvas
+from tkinter import TOP, BOTH, YES
 from smartmirror.api_settings import ApiSettings
 from smartmirror.Logger import Logger
 """

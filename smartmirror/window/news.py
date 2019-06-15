@@ -1,5 +1,6 @@
 import feedparser
-from tkinter import *
+from tkinter import Frame, Label
+from tkinter import TOP, W
 from smartmirror.api_settings import ApiSettings
 from smartmirror.window.news_headline import NewsHeadline
 from smartmirror.Logger import Logger
