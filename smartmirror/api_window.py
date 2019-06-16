@@ -90,7 +90,7 @@ class ApiWindow(ApiState):
 
     def full_screen(self, event=None):
         Logger.debug("ApiWindow full screen has been enabled"
-                             if self.api_full_screen else "ApiWindow full screen has been disabled")
+                     if self.api_full_screen else "ApiWindow full screen has been disabled")
         self.api_full_screen = not self.api_full_screen
         self.tk.attributes("-fullscreen", self.api_full_screen)
 

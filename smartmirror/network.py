@@ -55,7 +55,7 @@ class Network(object):
             response = requests.get(ip_reg_url)
             ip_json = json.loads(response.text)
             Logger.debug("request: " + str(ip_reg_url) + " response: " + str(response)
-                                 + " json: " + str(ip_json))
+                         + " json: " + str(ip_json))
             return ip_json['ip']
         except Exception as err:
             Logger.critical("Exception: {0}".format(err))
@@ -68,7 +68,7 @@ class Network(object):
             response = requests.get(location_req_url)
             location_json = json.loads(response.text)
             Logger.debug("request: " + str(location_req_url) + " response: " + str(response)
-                                 + " json: " + str(location_json))
+                         + " json: " + str(location_json))
             return location_json
         except Exception as err:
             Logger.critical("Exception: {0}".format(err))
