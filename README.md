@@ -160,6 +160,8 @@ finally install `face_recognition` module
 ```
 sudo pip3 install face_recognition
 ```
+
+**At the end please remove unused files to free storage on microSD card**
 ## Running
 
 At the beginning prepares a images frames with users which can by authorized in application (run only once when images do not exist)
