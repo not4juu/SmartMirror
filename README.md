@@ -110,7 +110,7 @@ When all openCV dependencies have been installed. Checkout openCV source code an
         -D INSTALL_PYTHON_EXAMPLES=OFF \
         -D BUILD_EXAMPLES=OFF 
         
-    make j4
+    make -j4
 ```
 
 **DLib**
