@@ -4,7 +4,7 @@
 3. [Requirements](#requirements)
 4. [Running](#running)
 5. [Runtime logs](#runtime-logs)
-6. [Authors](#author)
+6. [Author](#author)
 7. [Api License](#license)
 
 # Smart Mirror
@@ -54,29 +54,17 @@ Please ensure which dlib version is supported by your python interpreter (64bit/
 recommended (tested one): 
  * windows [python 3.5.0 interpreter](https://www.python.org/ftp/python/3.5.0/python-3.5.0.exe) 
  * dlib - [dlib-19.7.0.tar.gz](https://pypi.org/simple/dlib/)
-    ```
-    $ pip3 install https://files.pythonhosted.org/packages/e2/79/6aba1d2b3f9fbcf34d583188d8ff6818952ea875dceedf7c34a869637573/dlib-19.7.0.tar.gz#sha256=8728d820094f8df4a7c66fa5d8b4c944921ae79c56a094e33f2684122133fe6d
-    ```
+ 
+ ```
+    pip3 install https://files.pythonhosted.org/packages/e2/79/6aba1d2b3f9fbcf34d583188d8ff6818952ea875dceedf7c34a869637573/dlib-19.7.0.tar.gz#sha256=8728d820094f8df4a7c66fa5d8b4c944921ae79c56a094e33f2684122133fe6d
+ ```
 
 OpenCV can be easly installed via pip
 
 ### Raspberry Pi OS
 
-Firstly, please install all dependencies
-
-e.g
-```
-    sudo apt-get install python-tk tk8.5-dev tcl8.5-dev tk8.5 tcl8.5 libjpeg8-dev zlib1g-dev libtiff-dev libpng-dev liblcms2-dev
-```
-
-
-eSpeak lib (libspeak.so required by pyttsx3): 
-```
-   sudo apt-get install espeak
-```
-
-OpenCV
-
+*Please be patient checkout repos and compilation process take a lot of time.*
+    
 Before you start the compile process, you should increase your swap space size. This enables OpenCV to compile with all four cores of the Raspberry PI without the compile hanging due to memory problems.
 ```
 cat /etc/dphys-swapfile
@@ -89,9 +77,26 @@ sudo /etc/init.d/dphys-swapfile stop
 sudo /etc/init.d/dphys-swapfile start
 ```
 
-Then you can checkout a source code openCV and compile it
+eSpeak lib (libspeak.so required by pyttsx3): 
+```
+   sudo apt-get install espeak
+```
+
+#####OpenCV
+
+Firstly, please install all dependencies
 
 ```
+[compiler] sudo apt-get install build-essential
+[required] sudo apt-get install cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
+[required] sudo apt-get install python-tk tk8.5-dev tcl8.5-dev tk8.5 tcl8.5  zlib1g-dev liblcms2-dev
+[optional] sudo apt-get install python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev
+```
+
+When all openCV dependencies have been installed. Checkout openCV source code and compile it (please remember to set `ENABLE_NEON=ON` flag) [NEON_Benchmark](https://medium.com/@ghalfacree/benchmarking-the-raspberry-pi-3-b-plus-44122cf3d806)
+
+```
+    cd ~/
     git clone https://github.com/opencv/opencv.git
     git clone https://github.com/opencv/opencv_contrib.git
     cd opencv
@@ -99,13 +104,62 @@ Then you can checkout a source code openCV and compile it
     cd build
     cmake -D CMAKE_BUILD_TYPE=RELEASE \
         -D CMAKE_INSTALL_PREFIX=/usr/bin \
-        -D INSTALL_PYTHON_EXAMPLES=ON \
         -D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib/modules/ \
-        -D BUILD_EXAMPLES=ON
-    
+        -D ENABLE_NEON=ON \
+        -D ENABLE_VFPV3=ON \
+        -D INSTALL_PYTHON_EXAMPLES=OFF \
+        -D BUILD_EXAMPLES=OFF 
+        
     make j4
 ```
 
+#####DLib
+
+Install all dlib dependencies
+```
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install build-essential \
+    cmake \
+    gfortran \
+    git \
+    wget \
+    curl \
+    graphicsmagick \
+    libgraphicsmagick1-dev \
+    libatlas-dev \
+    libavcodec-dev \
+    libavformat-dev \
+    libboost-all-dev \
+    libgtk2.0-dev \
+    libjpeg-dev \
+    liblapack-dev \
+    libswscale-dev \
+    pkg-config \
+    python3-dev \
+    python3-numpy \
+    python3-pip \
+    zip
+sudo apt-get clean
+```
+
+```
+sudo apt-get install python3-picamera
+sudo pip3 install --upgrade picamera[array]
+```
+When all dLib dependencies have been installed. Checkout proper version of dlib source code and compile it (please remember to set `-mfpu=neon` flag) [NEON_Benchmark](https://medium.com/@ghalfacree/benchmarking-the-raspberry-pi-3-b-plus-44122cf3d806)
+
+```
+mkdir -p dlib
+git clone -b 'v19.8' --single-branch https://github.com/davisking/dlib.git dlib/
+cd ./dlib
+sudo python3 setup.py install --compiler-flags "-mfpu=neon"
+```
+
+finally install `face_recognition` module
+```
+sudo pip3 install face_recognition
+```
 ## Running
 
 At the beginning prepares a images frames with users which can by authorized in application (run only once when images do not exist)
