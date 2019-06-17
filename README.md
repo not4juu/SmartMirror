@@ -82,7 +82,7 @@ eSpeak lib (libspeak.so required by pyttsx3):
    sudo apt-get install espeak
 ```
 
-#####OpenCV
+**OpenCV**
 
 Firstly, please install all dependencies
 
@@ -113,7 +113,7 @@ When all openCV dependencies have been installed. Checkout openCV source code an
     make j4
 ```
 
-#####DLib
+**DLib**
 
 Install all dlib dependencies
 ```
