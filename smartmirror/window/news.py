@@ -49,8 +49,8 @@ class News(Frame):
             Logger.info("Get number of news: {0} from: {1}".format(len(self.news_list), self.news_url))
         except Exception as err:
             Logger.critical("News exception: {0}".format(err))
-        # updates every hour
-        self.after(60 * 60 * 1000, self.get_headlines)
+        # updates every 5 minutes
+        self.after(5 * 1000, self.get_headlines)
 
 
 if __name__ == '__main__':
