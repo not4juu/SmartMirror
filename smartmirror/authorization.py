@@ -9,9 +9,10 @@ from smartmirror.Logger import Logger
 
 
 def speed_test(end_time, start_time):
+    Logger.info("Data end: {0} start {1} ".format(end_time, start_time))
     delta = end_time - start_time
     Logger.info("Api Recognizer Time: {0} us {1} ms {2} s".format(
-        delta.microseconds, delta.microseconds * 0.001, delta.microseconds * 0.000001))
+        delta.microseconds, delta.microseconds * 0.001, delta.seconds))
 
 
 PATH = os.path.dirname(os.path.realpath(__file__))

@@ -20,9 +20,10 @@ running_console_bar = ['.', '..', '...', '....', '.....']
 
 
 def speed_test(end_time, start_time):
+    print("Data end: {0} start {1} ".format(end_time, start_time))
     delta = end_time - start_time
     print("Api Recognizer Time: {0} us {1} ms {2} s".format(
-        delta.microseconds, delta.microseconds * 0.001, delta.microseconds * 0.000001))
+        delta.microseconds, delta.microseconds * 0.001, delta.seconds))
 
 
 # https://docs.opencv.org/3.4/d4/d48/namespacecv_1_1face.html
@@ -54,6 +55,7 @@ def face_recognition_training():
 
         print('\r {0}'.format(running_console_bar[items % len(running_console_bar)]), end="")
         items += 1
+
     speed_test(datetime.now(), start_time)
     print("Faces encoding data ends, items: {0}".format(len(known_names)))
     data = {"encodings": known_encodings, "names": known_names}
@@ -99,10 +101,9 @@ def face_opencv_training(opencv_option=OpenCVOption.LBPHF):
             known_encodings.append(numpy_image[y: y + height, x: x + width])
             known_names.append(faces_detected[sample_name])
 
-    print("Faces encoding data ends, items: {0}".format(len(known_names)))
-    print("\n Training  ... {0}".format(faces_detected))
     recognizer.train(known_encodings, np.array(known_names))
     speed_test(datetime.now(), start_time)
+    print("Faces encoding data ends, items: {0}".format(len(known_names)))
     recognizer.write(PATH + '/../trained_data/trainer.yml')
     print("Face opencv training ends successfully")
 
