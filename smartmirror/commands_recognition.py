@@ -1,4 +1,5 @@
 from enum import Enum
+from datetime import datetime
 from speech_recognition import Recognizer, Microphone
 from speech_recognition import RequestError, UnknownValueError
 from smartmirror.glo_messages import GLO_MSG
@@ -6,6 +7,14 @@ from smartmirror.glo_commands import GLO_CMD
 from smartmirror.glo_commands import GET_COMMAND
 from smartmirror.api_state import ApiState
 from smartmirror.Logger import Logger
+
+
+def speed_test(end_time, start_time):
+    delta = end_time - start_time
+    Logger.info("Api Recognizer Time: {0} us {1} ms {2} s".format(
+        delta.microseconds, delta.microseconds * 0.001, delta.microseconds * 0.000001))
+
+
 """
     Interface for Api Speech Recognition Options 
 """
@@ -69,8 +78,12 @@ class CommandsRecognition(ApiState):
 
     def callback_recognition(self, recognizer, audio):
         try:
+            start_time = datetime.now()
             command = self._api_recognition(audio)
+            speed_test(datetime.now(), start_time)
             self.validate_command(command)
+            speed_test(datetime.now(), start_time)
+
         except UnboundLocalError as err:
             Logger.warning("UnboundLocalError : {0} ".format(err))
         except RequestError as err:
@@ -111,4 +124,19 @@ class CommandsRecognition(ApiState):
 
 
 if __name__ == "__main__":
-    pass
+
+    from smartmirror.Logger import init_logger
+
+    init_logger(False, True)
+
+    def callback_test(command):
+        Logger.info("Detected : {0}".format(command))
+
+    command_rec = CommandsRecognition(callback_test)
+    command_rec.background_listen()
+
+    try:
+        while True:
+            pass
+    except KeyboardInterrupt:
+        pass

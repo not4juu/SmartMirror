@@ -1,5 +1,7 @@
 from argparse import ArgumentParser
 from imutils import paths
+from enum import Enum
+from datetime import datetime
 from PIL import Image
 import pickle
 import numpy as np
@@ -17,6 +19,19 @@ IMAGES_PATHS = list(paths.list_images(PATH + '/../dataset'))
 running_console_bar = ['.', '..', '...', '....', '.....']
 
 
+def speed_test(end_time, start_time):
+    delta = end_time - start_time
+    print("Api Recognizer Time: {0} us {1} ms {2} s".format(
+        delta.microseconds, delta.microseconds * 0.001, delta.microseconds * 0.000001))
+
+
+# https://docs.opencv.org/3.4/d4/d48/namespacecv_1_1face.html
+class OpenCVOption(Enum):
+    LBPHF = 1
+    FISHER = 2
+    EIGEN = 3
+
+
 def face_recognition_training():
     known_encodings = []
     known_names = []
@@ -25,6 +40,7 @@ def face_recognition_training():
     model = 'hog'  # available also 'cnn' https://face-recognition.readthedocs.io/en/latest/face_recognition.html
     print("Starts face recognition training with model: {0}".format(model))
 
+    start_time = datetime.now()
     for (i, image_path) in enumerate(IMAGES_PATHS):
         sample_name = image_path.split(os.path.sep)[-2]
         image = cv2.imread(image_path)
@@ -38,7 +54,7 @@ def face_recognition_training():
 
         print('\r {0}'.format(running_console_bar[items % len(running_console_bar)]), end="")
         items += 1
-
+    speed_test(datetime.now(), start_time)
     print("Faces encoding data ends, items: {0}".format(len(known_names)))
     data = {"encodings": known_encodings, "names": known_names}
     file = open(PATH + "/../trained_data/encodings.pickle", "wb")
@@ -47,17 +63,26 @@ def face_recognition_training():
     print("Face recognition training ends successfully")
 
 
-def face_opencv_training():
+def face_opencv_training(opencv_option=OpenCVOption.LBPHF):
     known_encodings = []
     known_names = []
 
     faces_detected = {}
     ids_number = 0
 
-    recognizer = cv2.face.LBPHFaceRecognizer_create()  # https://docs.opencv.org/3.4/d4/d48/namespacecv_1_1face.html
+    if opencv_option is OpenCVOption.LBPHF:
+        recognizer = cv2.face.LBPHFaceRecognizer_create()
+    elif opencv_option is OpenCVOption.FISHER:
+        recognizer = cv2.face_FisherFaceRecognizer.create()
+    elif opencv_option is OpenCVOption.EIGEN:
+        recognizer = cv2.face_EigenFaceRecognizer.create()
+    else:
+        print("OpenCV option is not defined")
+        return -1
+
     detector = cv2.CascadeClassifier(PATH + '/../cascades/haarcascade_frontal_face_default.xml')
     print("Starts face opencv training")
-
+    start_time = datetime.now()
     for image_path in IMAGES_PATHS:
         sample_name = image_path.split(os.path.sep)[-2]
 
@@ -77,6 +102,7 @@ def face_opencv_training():
     print("Faces encoding data ends, items: {0}".format(len(known_names)))
     print("\n Training  ... {0}".format(faces_detected))
     recognizer.train(known_encodings, np.array(known_names))
+    speed_test(datetime.now(), start_time)
     recognizer.write(PATH + '/../trained_data/trainer.yml')
     print("Face opencv training ends successfully")
 
@@ -87,8 +113,11 @@ if __name__ == "__main__":
         description="Smart Mirror tools to train collected image samples",
         epilog="more detailed information in README.md file https://github.com/not4juu/SmartMirror"
     )
-    parser.add_argument("-t", "--training_method", type=str, default="face_recognition",
+    parser.add_argument("-t", "--training_method", type=str, default="face_opencv",
                         help="training method to use: face_recognition or face_opencv")
+    parser.add_argument("-opencv", "--opencv", type=str, default="LBPHF",
+                        help="opencv avaliable options: LBPHF, FISHER, EIGEN \n"
+                             "https://docs.opencv.org/3.4/d4/d48/namespacecv_1_1face.html")
     parser.add_argument("--version", action="version", version="%(prog)s 1.0.0")
     args = parser.parse_args()
 
@@ -98,4 +127,10 @@ if __name__ == "__main__":
     if args.training_method == "face_recognition":
         face_recognition_training()
     elif args.training_method == "face_opencv":
-        face_opencv_training()
+        if args.opencv == "FISHER":
+            face_opencv_training(OpenCVOption.FISHER)
+        elif args.opencv == "EIGEN":
+            face_opencv_training(OpenCVOption.EIGEN)
+        else:
+            face_opencv_training(OpenCVOption.LBPHF)
+

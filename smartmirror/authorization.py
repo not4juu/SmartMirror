@@ -4,7 +4,15 @@ import sys
 import pickle
 import face_recognition
 from threading import Thread
+from datetime import datetime
 from smartmirror.Logger import Logger
+
+
+def speed_test(end_time, start_time):
+    delta = end_time - start_time
+    Logger.info("Api Recognizer Time: {0} us {1} ms {2} s".format(
+        delta.microseconds, delta.microseconds * 0.001, delta.microseconds * 0.000001))
+
 
 PATH = os.path.dirname(os.path.realpath(__file__))
 if sys.platform != 'linux':
@@ -32,7 +40,7 @@ class Authorization:
         self.font = cv2.FONT_HERSHEY_SIMPLEX
 
         self.detected = {}
-        self.samples_confidence = 20
+        self.samples_confidence = 5
 
         self.min_width = 0.1 * self.camera.get(3)
         self.min_height = 0.1 * self.camera.get(4)
@@ -57,6 +65,7 @@ class Authorization:
         recognizer = cv2.face.LBPHFaceRecognizer_create()  # https://docs.opencv.org/3.4/d4/d48/namespacecv_1_1face.html
         recognizer.read(PATH + '/../trained_data/trainer.yml')
 
+        start_time = datetime.now()
         while self.thread_running and self.authorization_process_running:
             response, image = self.camera.read()
             gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -83,10 +92,12 @@ class Authorization:
             if self.debug:
                 cv2.imshow('Authorization detected', image)
                 cv2.waitKey(10)
+        speed_test(datetime.now(), start_time)
 
     def run_dlib_face_recognition(self):
         data = pickle.loads(open(PATH + "/../trained_data/encodings.pickle", "rb").read())
 
+        start_time = datetime.now()
         while self.thread_running and self.authorization_process_running:
 
             response, image = self.camera.read()
@@ -127,6 +138,7 @@ class Authorization:
             if self.debug:
                 cv2.imshow('Authorization detected', image)
                 cv2.waitKey(10)
+        speed_test(datetime.now(), start_time)
 
     def add_detected_face(self, name):
         Logger.debug("Detected {0}".format(name))
@@ -144,6 +156,7 @@ class Authorization:
             for name, confidence in self.detected.items():
                 if self.samples_confidence == confidence:
                     self.callback_authorized_user(name)
+                    Logger.debug("Recognized faces : {0}".format(self.detected))
 
     def run(self, method='opencv_face_recognition', debug=False):
         Logger.debug("Start authorization thread: {0}".format(method))
@@ -166,4 +179,24 @@ class Authorization:
 
 
 if __name__ == "__main__":
-    pass
+
+    from smartmirror.Logger import init_logger
+    from smartmirror.camera import Camera
+
+    init_logger(False, True)
+    camera = Camera()
+
+
+    def callback_test(command):
+        Logger.info("Detected : {0}".format(command))
+
+    authorization = Authorization(camera.get_camera(), callback_test)
+    authorization.run(method='dlib_face_recognition', debug=True)
+
+    try:
+        while True:
+            pass
+    except KeyboardInterrupt:
+        pass
+
+
