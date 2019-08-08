@@ -50,7 +50,7 @@ class News(Frame):
         except Exception as err:
             Logger.critical("News exception: {0}".format(err))
         # updates every 5 minutes
-        self.after(5 * 1000, self.get_headlines)
+        self.after(5 * 60 * 1000, self.get_headlines)
 
 
 if __name__ == '__main__':
