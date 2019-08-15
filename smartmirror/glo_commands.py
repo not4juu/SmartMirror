@@ -5,8 +5,8 @@ GLO_CMD = {
     GLO_MSG['HIDE_WEATHER']: 'ukryj pogodę',
     GLO_MSG['DISPLAY_NEWS']: 'pokaż wiadomości',
     GLO_MSG['HIDE_NEWS']: 'ukryj wiadomości',
-    GLO_MSG['DISPLAY_CLOCK']: 'pokaż godzinę',
-    GLO_MSG['HIDE_CLOCK']: 'ukryj godzinę',
+    GLO_MSG['DISPLAY_CLOCK']: 'pokaż zegar',
+    GLO_MSG['HIDE_CLOCK']: 'ukryj zegar',
     GLO_MSG['LOGOUT']: 'wyloguj',
 }
 
